@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carbon Rent a Car</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Poppins", sans-serif;
+      background: #ffffff;
+      color: #111;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #111;
+      text-align: center;
+      font-weight: 700;
+      font-size: 28px;
+      margin-bottom: 25px;
+      animation: fadeDown 0.8s ease forwards;
+    }
+
+    /* 3D Card */
+    .card {
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.08), 
+                  0 4px 8px rgba(0,0,0,0.04);
+      padding: 24px;
+      margin: 20px 0;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transform-style: preserve-3d;
+      animation: fadeUp 0.7s ease forwards;
+    }
+    .card:hover {
+      transform: translateY(-6px) rotateX(2deg) rotateY(2deg);
+      box-shadow: 0 16px 34px rgba(0,0,0,0.12), 
+                  0 6px 12px rgba(0,0,0,0.05);
+    }
+
+    h3 {
+      margin-top: 0;
+      margin-bottom: 14px;
+      font-weight: 600;
+      font-size: 19px;
+      color: #222;
+    }
+
+    label {
+      font-weight: 500;
+      margin-top: 14px;
+      display: block;
+      color: #444;
+    }
+
+    select, input[type=number], input[type=range] {
+      width: 100%;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid #ddd;
+      font-size: 15px;
+      margin-top: 6px;
+      box-sizing: border-box;
+      background: #fafafa;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+    select:focus, input:focus {
+      outline: none;
+      border-color: #9c0a54;
+      transform: scale(1.01);
+    }
+
+    input[type=range] {
+      padding: 0;
+      height: 6px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: #e2e2e2;
+      border-radius: 5px;
+      margin-top: 12px;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      background: #9c0a54;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+    input[type=range]::-webkit-slider-thumb:hover {
+      background: #7b0045;
+      transform: scale(1.1);
+    }
+
+    /* Summary animation */
+    .summary p {
+      margin: 6px 0;
+      font-size: 15px;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: all 0.4s ease;
+    }
+    .summary p.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .total {
+      font-size: 20px;
+      font-weight: 700;
+      color: #9c0a54;
+      margin-top: 14px;
+    }
+
+    /* Gradient Accent Button */
+    .btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 16px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #9c0a54, #7b0045);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      margin-top: 18px;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.18);
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    /* Tariff Cards */
+    .tarifler {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 14px;
+      margin-top: 15px;
+    }
+    .tarif {
+      background: #fafafa;
+      border-radius: 14px;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+      padding: 14px;
+      text-align: center;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: scale(0.95) translateY(10px);
+    }
+    .tarif.show {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+    .tarif strong {
+      display: block;
+      margin-top: 4px;
+      color: #9c0a54;
+      font-size: 15px;
+    }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from {opacity:0; transform: translateY(20px);}
+      to {opacity:1; transform: translateY(0);}
+    }
+    @keyframes fadeDown {
+      from {opacity:0; transform: translateY(-20px);}
+      to {opacity:1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>crbnrnt.com</h1>
+    
+
+    <!-- Car Selector -->
+    <div class="card">
+      <h3>Avtomobil seç</h3>
+      <label for="carSelect">Avtomobil:</label>
+      <select id="carSelect">
+        <option value="optima">Kia Optima (Comfort 2013–2015)</option>
+        <option value="elantra">Hyundai Elantra (Comfort 2016–2018)</option>
+        <option value="camry">Toyota Camry (Business 2017–2019)</option>
+      </select>
+
+      <label for="daysInput">Gün sayı</label>
+      <input type="number" id="daysInput" value="4" min="1" max="60">
+      <input type="range" id="daysSlider" value="4" min="1" max="60">
+    </div>
+
+    <!-- Hesablama -->
+    <div class="card">
+      <h3>Hesablama</h3>
+      <div class="summary" id="summary">
+        <p><strong>Avtomobil:</strong> <span id="carName"></span></p>
+        <p><strong>Sinif:</strong> <span id="carClass"></span></p>
+        <p><strong>Gün:</strong> <span id="days"></span></p>
+        <p><strong>Gündəlik tarif:</strong> <span id="dailyPrice"></span></p>
+        <p><strong>Aralıq:</strong> <span id="range"></span></p>
+        <p><strong>Ara cəm:</strong> <span id="subtotal"></span></p>
+        <p><strong>ƏDV (7%):</strong> <span id="vat"></span></p>
+        <p class="total">Cəmi: <span id="total"></span></p>
+      </div>
+      <button class="btn">✨ Sifarişi davam et</button>
+    </div>
+
+    <!-- Tariflər -->
+    <div class="card">
+      <h3>Tarif pillələri</h3>
+      <div class="tarifler" id="tarifler"></div>
+    </div>
+  </div>
+
+  <script>
+    const cars = {
+      optima: {
+        name: "Kia Optima",
+        class: "Comfort (2013–2015)",
+        tariffs: [
+          {min:1,max:3,price:70},
+          {min:4,max:7,price:65},
+          {min:8,max:15,price:60},
+          {min:16,max:24,price:55},
+          {min:25,max:30,price:50},
+          {min:31,max:999,price:49}
+        ]
+      },
+      elantra: {
+        name: "Hyundai Elantra",
+        class: "Comfort (2016–2018)",
+        tariffs: [
+          {min:1,max:3,price:60},
+          {min:4,max:7,price:55},
+          {min:8,max:15,price:50},
+          {min:16,max:24,price:48},
+          {min:25,max:30,price:45},
+          {min:31,max:999,price:43}
+        ]
+      },
+      camry: {
+        name: "Toyota Camry",
+        class: "Business (2017–2019)",
+        tariffs: [
+          {min:1,max:3,price:90},
+          {min:4,max:7,price:85},
+          {min:8,max:15,price:80},
+          {min:16,max:24,price:75},
+          {min:25,max:30,price:70},
+          {min:31,max:999,price:65}
+        ]
+      }
+    };
+
+    const carSelect = document.getElementById("carSelect");
+    const daysInput = document.getElementById("daysInput");
+    const daysSlider = document.getElementById("daysSlider");
+    const carName = document.getElementById("carName");
+    const carClass = document.getElementById("carClass");
+    const days = document.getElementById("days");
+    const dailyPrice = document.getElementById("dailyPrice");
+    const range = document.getElementById("range");
+    const subtotal = document.getElementById("subtotal");
+    const vat = document.getElementById("vat");
+    const total = document.getElementById("total");
+    const tarifler = document.getElementById("tarifler");
+    const summary = document.getElementById("summary");
+
+    let currentSliderValue = parseInt(daysSlider.value);
+    let targetSliderValue = currentSliderValue;
+
+    function animateSlider() {
+      if (Math.abs(targetSliderValue - currentSliderValue) > 0.1) {
+        currentSliderValue += (targetSliderValue - currentSliderValue) * 0.15;
+        daysSlider.value = currentSliderValue;
+        requestAnimationFrame(animateSlider);
+      } else {
+        currentSliderValue = targetSliderValue;
+        daysSlider.value = targetSliderValue;
+      }
+    }
+
+    function renderTariffs(car) {
+      tarifler.innerHTML = "";
+      car.tariffs.forEach((t, i) => {
+        const div = document.createElement("div");
+        div.className = "tarif";
+        setTimeout(() => div.classList.add("show"), i * 100);
+        div.innerHTML = `${t.min}–${t.max >= 999 ? "+" : t.max} gün <strong>AZN ${t.price.toFixed(2)}</strong>`;
+        tarifler.appendChild(div);
+      });
+    }
+
+    function updateCalculator() {
+      const car = cars[carSelect.value];
+      const d = parseInt(daysInput.value) || 1;
+      targetSliderValue = d;
+      animateSlider();
+
+      let tariff = car.tariffs.find(t => d >= t.min && d <= t.max);
+      if (!tariff) tariff = car.tariffs[car.tariffs.length-1];
+
+      const pricePerDay = tariff.price;
+      const sub = d * pricePerDay;
+      const vatVal = +(sub * 0.07).toFixed(2);
+      const totalVal = +(sub + vatVal).toFixed(2);
+
+      carName.textContent = car.name;
+      carClass.textContent = car.class;
+      days.textContent = d + " gün";
+      dailyPrice.textContent = "AZN " + pricePerDay.toFixed(2);
+      range.textContent = tariff.min + "–" + (tariff.max>=999?"+" : tariff.max) + " gün";
+      subtotal.textContent = "AZN " + sub.toFixed(2);
+      vat.textContent = "AZN " + vatVal.toFixed(2);
+      total.textContent = "AZN " + totalVal.toFixed(2);
+
+      Array.from(summary.querySelectorAll("p")).forEach((p, i) => {
+        p.classList.remove("show");
+        setTimeout(() => p.classList.add("show"), i * 120);
+      });
+
+      renderTariffs(car);
+    }
+
+    carSelect.addEventListener("change", updateCalculator);
+    daysInput.addEventListener("input", () => {
+      updateCalculator();
+    });
+    daysSlider.addEventListener("input", () => {
+      daysInput.value = daysSlider.value;
+      targetSliderValue = parseInt(daysSlider.value);
+      currentSliderValue = targetSliderValue;
+      updateCalculator();
+    });
+
+    updateCalculator();
+  </script>
+</body>
+</html>
