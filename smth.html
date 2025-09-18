@@ -500,103 +500,88 @@ function formatCurrency(val){
 function animateSliderSpring(){
   currentSliderValue += (targetSliderValue - currentSliderValue) * 0.2;
   daysSlider.value = Math.round(currentSliderValue);
-  if(Math.abs(targetSliderValue - currentSliderValue) > 0.1) requestAnimationFrame(animateSliderSpring);
-  else currentSliderValue = targetSliderValue;
+  if(Math.abs(targetSliderValue-currentSliderValue)>0.1) requestAnimationFrame(animateSliderSpring);
 }
 
 // Render tariffs
 function renderTariffs(car){
-  tarifler.innerHTML = "";
-  car.tariffs.forEach((t,i)=>{
+  tarifler.innerHTML="";
+  car.tariffs.forEach(t=>{
     const div = document.createElement("div");
-    div.className = "tarif";
-    setTimeout(()=>div.classList.add("show"), i*100);
-    const price = (t.price * rates[currentCurrency]).toFixed(2);
-    const dayRange = t.max>=999 ? `${t.min}+` : `${t.min}-${t.max}`;
-    div.innerHTML = `${dayRange} ${dayWord[currentLang]} <strong>${currentCurrency} ${price}</strong>`;
+    div.className="tarif";
+    div.innerHTML=`${t.min}-${t.max>=999?"+":t.max} ${dayWord[currentLang]}<strong>${formatCurrency(t.price)}</strong>`;
     tarifler.appendChild(div);
+    setTimeout(()=>div.classList.add("show"),50);
   });
 }
 
 // Update calculator
 function updateCalculator(){
   const car = cars[carSelect.value];
-  let d = parseInt(daysInput.value) || 1;
-  if(d<1) d=1; if(d>90)d=90;
-  targetSliderValue = d;
+  let d = parseInt(daysInput.value)||1;
+  if(d<1)d=1;if(d>90)d=90;
+  targetSliderValue=d;
   animateSliderSpring();
 
   let tariff = car.tariffs.find(t=>d>=t.min && d<=t.max);
   if(!tariff) tariff = car.tariffs[car.tariffs.length-1];
 
   const pricePerDay = tariff.price;
-  const sub = d * pricePerDay;
+  const sub = d*pricePerDay;
   const vatVal = +(sub*0.07).toFixed(2);
   const totalVal = +(sub + vatVal).toFixed(2);
 
-  carName.textContent = car.name;
-  carClass.textContent = car.class;
-  days.textContent = d + " " + dayWord[currentLang];
-  dailyPrice.textContent = formatCurrency(pricePerDay);
-  rangeElem.textContent = tariff.min + (tariff.max>=999 ? '+' : '-' + tariff.max) + " " + dayWord[currentLang];
-  subtotal.textContent = formatCurrency(sub);
-  vat.textContent = formatCurrency(vatVal);
-  total.textContent = formatCurrency(totalVal);
+  carName.textContent=car.name;
+  carClass.textContent=car.class;
+  days.textContent=d + " " + dayWord[currentLang];
+  dailyPrice.textContent=formatCurrency(pricePerDay);
+  rangeElem.textContent=tariff.min + (tariff.max>=999?'+':'-'+tariff.max) + " " + dayWord[currentLang];
+  subtotal.textContent=formatCurrency(sub);
+  vat.textContent=formatCurrency(vatVal);
+  total.textContent=formatCurrency(totalVal);
+
+  // Show summary
+  document.querySelectorAll("#summary p").forEach(p=>p.classList.add("show"));
 
   // Update labels
-  document.getElementById("carLabel").textContent = labels[currentLang].carLabel;
-  document.getElementById("carLabel2").textContent = labels[currentLang].car;
-  document.getElementById("classLabel").textContent = labels[currentLang].class;
-  document.getElementById("daysLabel").textContent = labels[currentLang].daysLabel;
-  document.getElementById("daysLabel2").textContent = labels[currentLang].days;
-  document.getElementById("dailyLabel").textContent = labels[currentLang].daily;
-  document.getElementById("rangeLabel").textContent = labels[currentLang].range;
-  document.getElementById("subLabel").textContent = labels[currentLang].subtotal;
-  document.getElementById("vatLabel").textContent = labels[currentLang].vat;
-  document.getElementById("totalLabel").textContent = labels[currentLang].total;
-  document.getElementById("calcLabel").textContent = labels[currentLang].calcLabel;
-  document.getElementById("orderLabel").textContent = labels[currentLang].orderLabel;
-  document.getElementById("tariffLabel").textContent = labels[currentLang].tariffLabel;
+  document.getElementById("carLabel").textContent=labels[currentLang].carLabel;
+  document.getElementById("carLabel2").textContent=labels[currentLang].car;
+  document.getElementById("classLabel").textContent=labels[currentLang].class;
+  document.getElementById("daysLabel").textContent=labels[currentLang].daysLabel;
+  document.getElementById("daysLabel2").textContent=labels[currentLang].days;
+  document.getElementById("dailyLabel").textContent=labels[currentLang].daily;
+  document.getElementById("rangeLabel").textContent=labels[currentLang].range;
+  document.getElementById("subLabel").textContent=labels[currentLang].subtotal;
+  document.getElementById("vatLabel").textContent=labels[currentLang].vat;
+  document.getElementById("totalLabel").textContent=labels[currentLang].total;
+  document.getElementById("calcLabel").textContent=labels[currentLang].calcLabel;
+  document.getElementById("orderLabel").textContent=labels[currentLang].orderLabel;
+  document.getElementById("tariffLabel").textContent=labels[currentLang].tariffLabel;
 
   renderTariffs(car);
 }
 
 // Event listeners
-carSelect.addEventListener("change", updateCalculator);
-daysInput.addEventListener("input", ()=>{
-  let val = parseInt(daysInput.value)||1;
-  if(val<1)val=1;if(val>90)val=90;
-  daysInput.value = val;
-  targetSliderValue = val;
-  updateCalculator();
-});
-daysSlider.addEventListener("input", ()=>{
-  daysInput.value = daysSlider.value;
-  targetSliderValue = parseInt(daysSlider.value);
-  updateCalculator();
-});
+carSelect.addEventListener("change",updateCalculator);
+daysInput.addEventListener("input",()=>{targetSliderValue=parseInt(daysInput.value)||1; updateCalculator();});
+daysSlider.addEventListener("input",()=>{daysInput.value=daysSlider.value; targetSliderValue=parseInt(daysSlider.value); updateCalculator();});
 
+// Currency toggle
 document.querySelectorAll(".currency-btn").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    currentCurrency = btn.dataset.currency;
-    document.querySelectorAll(".currency-btn").forEach(b=>b.classList.remove("active"));
-    btn.classList.add("active");
-    updateCalculator();
-  });
+  btn.addEventListener("click",()=>{currentCurrency=btn.dataset.currency; document.querySelectorAll(".currency-btn").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); updateCalculator();});
 });
 
+// Language toggle
 document.querySelectorAll(".language-toggle span").forEach(span=>{
   span.addEventListener("click",()=>{
-    currentLang = span.dataset.lang;
+    currentLang=span.dataset.lang;
     document.querySelectorAll(".language-toggle span").forEach(s=>s.classList.remove("active"));
     span.classList.add("active");
     updateCalculator();
   });
 });
 
-
-    
-// Initialize
+// Initial render
 updateCalculator();
   </script>
 </body>
