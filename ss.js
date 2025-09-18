@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carbon Rent Cost Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/phosphor-icons"></script>
+  <style>
+/* ================= Global Reset ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  font-family: 'Montserrat', sans-serif;
+  background: #ffffff;
+  color: #111;
+  -webkit-text-size-adjust: 100%; 
+  touch-action: manipulation;
+}
+
+a, select, option {
+  color: inherit !important;
+  text-decoration: none !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+input, select, textarea {
+  font-size: 16px; 
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ================= Container ================= */
+.container {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+  overflow: hidden;
+}
+
+/* ================= Title ================= */
+h1 {
+  text-align: center;
+  font-weight: 800;
+  font-size: 28px;
+  margin-bottom: 6px;
+  background: linear-gradient(135deg, #9c0a54, #7b0045);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 8px rgba(156, 10, 84, 0.4);
+  animation: fadeDown 0.8s ease forwards;
+}
+.subtitle {
+  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 25px;
+  opacity: 0.9;
+}
+
+/* ================= Card ================= */
+.card {
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
+  padding: 24px;
+  margin: 20px 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeUp 0.7s ease forwards;
+  overflow: hidden;
+}
+.card:hover {
+  transform: translateY(-6px) rotateX(2deg) rotateY(2deg);
+  box-shadow: 0 16px 34px rgba(0,0,0,0.12), 0 6px 12px rgba(0,0,0,0.05);
+}
+
+/* ================= Headings ================= */
+h3 {
+  margin-top: 0;
+  margin-bottom: 14px;
+  font-weight: 600;
+  font-size: 19px;
+  color: #222;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+label {
+  font-weight: 500;
+  margin-top: 14px;
+  display: block;
+  color: #444;
+}
+
+/* ================= Inputs & Select ================= */
+select, input[type=number], input[type=range] {
+  width: 100%;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  margin-top: 6px;
+  box-sizing: border-box;
+  background: #fafafa;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+  appearance: none;
+}
+
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%239c0a54' viewBox='0 0 256 256'%3E%3Cpath d='M128 176a8 8 0 0 1-5.66-2.34l-80-80a8 8 0 0 1 11.32-11.32L128 157.37l74.34-74.34a8 8 0 0 1 11.32 11.32l-80 80A8 8 0 0 1 128 176z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 14px;
+  padding-right: 36px;
+}
+
+select:focus, input:focus {
+  outline: none;
+  border-color: #9c0a54;
+  transform: none !important;
+}
+
+/* ================= Range Slider ================= */
+input[type=range] {
+  padding: 0;
+  height: 6px;
+  background: #e2e2e2;
+  border-radius: 5px;
+  margin-top: 12px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  background: #9c0a54;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+input[type=range]:active::-webkit-slider-thumb {
+  transform: scale(1.4);
+}
+
+input[type=range]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  background: #9c0a54;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+input[type=range]:active::-moz-range-thumb {
+  transform: scale(1.4);
+}
+
+/* ================= Summary ================= */
+.summary p {
+  margin: 6px 0;
+  font-size: 15px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: all 0.4s ease;
+}
+.summary p.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ================= Total price ================= */
+.total {
+  font-size: 26px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #9c0a54, #7b0045);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-top: 20px;
+  position: relative;
+  animation: glowText 3s infinite ease-in-out;
+}
+.total::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(120deg, rgba(255,255,255,0.45) 0%, transparent 80%);
+  transform: skewX(-25deg);
+  animation: shimmer 4s infinite;
+}
+
+/* ================= Button ================= */
+.btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 16px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #9c0a54, #7b0045);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  margin-top: 18px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.18);
+  transition: all 0.25s ease;
+}
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+.btn:active {
+  transform: scale(0.97);
+}
+
+/* ================= Tariffs ================= */
+.tarifler {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 14px;
+  margin-top: 15px;
+}
+.tarif {
+  background: #fafafa;
+  border-radius: 14px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+  padding: 14px;
+  text-align: center;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: scale(0.95) translateY(10px);
+}
+.tarif.show {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+.tarif strong {
+  display: block;
+  margin-top: 4px;
+  color: #9c0a54;
+  font-size: 15px;
+}
+
+/* ================= Animations ================= */
+@keyframes fadeUp {
+  from {opacity:0; transform: translateY(20px);}
+  to {opacity:1; transform: translateY(0);}
+}
+@keyframes fadeDown {
+  from {opacity:0; transform: translateY(-20px);}
+  to {opacity:1; transform: translateY(0);}
+}
+@keyframes glowText {
+  0%, 100% { text-shadow: 0 0 4px rgba(156, 10, 84, 0.3); }
+  50% { text-shadow: 0 0 12px rgba(156, 10, 84, 0.6); }
+}
+@keyframes shimmer {
+  0% { left: -60%; }
+  100% { left: 120%; }
+}
+
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Carbon Rent</h1>
+    <div class="subtitle">Cost Calculator – Drive Smart</div>
+
+    <div class="card">
+      <h3><i class="ph-car"></i> Avtomobil seç</h3>
+      <label for="carSelect">Avtomobil:</label>
+      <select id="carSelect"></select>
+
+      <label for="daysInput"><i class="ph-calendar"></i> Gün sayı</label>
+      <input type="number" id="daysInput" value="4" min="1" max="90">
+      <input type="range" id="daysSlider" value="4" min="1" max="90">
+    </div>
+
+    <div class="card">
+      <h3><i class="ph-calculator"></i> Hesablama</h3>
+      <div class="summary" id="summary">
+        <p><strong>Avtomobil:</strong> <span id="carName"></span></p>
+        <p><strong>Sinif:</strong> <span id="carClass"></span></p>
+        <p><strong>Gün:</strong> <span id="days"></span></p>
+        <p><strong>Gündəlik tarif:</strong> <span id="dailyPrice"></span></p>
+        <p><strong>Aralıq:</strong> <span id="range"></span></p>
+        <p><strong>Ara cəm:</strong> <span id="subtotal"></span></p>
+        <p><strong>ƏDV (7%):</strong> <span id="vat"></span></p>
+        <p class="total">Cəmi: <span id="total"></span></p>
+
+        
+      </div>
+      <button class="btn"><i class="ph-arrow-right"></i> Sifarişi davam et</button>
+    </div>
+
+    <div class="card">
+      <h3><i class="ph-currency-circle-dollar"></i> Tarif pillələri</h3>
+      <div class="tarifler" id="tarifler"></div>
+    </div>
+  </div>
+  <script>
+    const cars = { 
+     "mercedes-s-class-maybach": {
+    name: "Mercedes S Class Maybach",
+    class: "Business",
+    tariffs: [
+      { min: 1, max: 3, price: 230 },
+      { min: 4, max: 7, price: 220 },
+      { min: 8, max: 15, price: 200 },
+      { min: 16, max: 24, price: 190 },
+      { min: 25, max: 30, price: 170 },
+      { min: 31, max: 999, price: 150 }
+    ]
+  },
+  "kia-carnival": {
+    name: "Kia Carnival",
+    class: "Miniven",
+    tariffs: [
+      { min: 1, max: 3, price: 130 },
+      { min: 4, max: 7, price: 120 },
+      { min: 8, max: 15, price: 110 },
+      { min: 16, max: 24, price: 100 },
+      { min: 25, max: 30, price: 90 },
+      { min: 31, max: 999, price: 89 }
+    ]
+  },
+  "mercedes-viano": {
+    name: "Mercedes Viano",
+    class: "Miniven",
+    tariffs: [
+      { min: 1, max: 3, price: 140 },
+      { min: 4, max: 7, price: 130 },
+      { min: 8, max: 15, price: 120 },
+      { min: 16, max: 24, price: 110 },
+      { min: 25, max: 30, price: 100 },
+      { min: 31, max: 999, price: 99 }
+    ]
+  },
+  "mercedes-vito": {
+    name: "Mercedes Vito",
+    class: "Miniven",
+    tariffs: [
+      { min: 1, max: 3, price: 130 },
+      { min: 4, max: 7, price: 120 },
+      { min: 8, max: 15, price: 110 },
+      { min: 16, max: 24, price: 100 },
+      { min: 25, max: 30, price: 90 },
+      { min: 31, max: 999, price: 89 }
+    ]
+  },
+  "bmw-f90": {
+    name: "BMW F90",
+    class: "Sport",
+    tariffs: [
+      { min: 1, max: 3, price: 180 },
+      { min: 4, max: 7, price: 170 },
+      { min: 8, max: 15, price: 150 },
+      { min: 16, max: 24, price: 140 },
+      { min: 25, max: 30, price: 120 },
+      { min: 31, max: 999, price: 100 }
+    ]
+  },
+  "bmw-f36-m4": {
+    name: "BMW F36 M4",
+    class: "Sport",
+    tariffs: [
+      { min: 1, max: 3, price: 130 },
+      { min: 4, max: 7, price: 120 },
+      { min: 8, max: 15, price: 110 },
+      { min: 16, max: 24, price: 100 },
+      { min: 25, max: 30, price: 90 },
+      { min: 31, max: 999, price: 89 }
+    ]
+  },
+  "bmw-f10-mtech": {
+    name: "BMW F10 Mtech",
+    class: "Sport",
+    tariffs: [
+      { min: 1, max: 3, price: 130 },
+      { min: 4, max: 7, price: 120 },
+      { min: 8, max: 15, price: 110 },
+      { min: 16, max: 24, price: 100 },
+      { min: 25, max: 30, price: 90 },
+      { min: 31, max: 999, price: 89 }
+    ]
+  },
+  "bmw-f10-m5": {
+    name: "BMW F10 M5",
+    class: "Sport",
+    tariffs: [
+      { min: 1, max: 3, price: 120 },
+      { min: 4, max: 7, price: 110 },
+      { min: 8, max: 15, price: 100 },
+      { min: 16, max: 24, price: 90 },
+      { min: 25, max: 30, price: 80 },
+      { min: 31, max: 999, price: 79 }
+    ]
+  },
+  "ford-mustang": {
+    name: "Ford Mustang",
+    class: "Sport",
+    tariffs: [
+      { min: 1, max: 3, price: 180 },
+      { min: 4, max: 7, price: 170 },
+      { min: 8, max: 15, price: 150 },
+      { min: 16, max: 24, price: 140 },
+      { min: 25, max: 30, price: 120 },
+      { min: 31, max: 999, price: 100 }
+    ]
+  },
+  "defender": {
+    name: "Defender",
+    class: "Business",
+    tariffs: [
+      { min: 1, max: 3, price: 400 },
+      { min: 4, max: 7, price: 390 },
+      { min: 8, max: 15, price: 370 },
+      { min: 16, max: 24, price: 360 },
+      { min: 25, max: 30, price: 340 },
+      { min: 31, max: 999, price: 320 }
+    ]
+  },
+  "mercedes-e-class": {
+    name: "Mercedes E Class",
+    class: "Business",
+    tariffs: [
+      { min: 1, max: 3, price: 200 },
+      { min: 4, max: 7, price: 190 },
+      { min: 8, max: 15, price: 170 },
+      { min: 16, max: 24, price: 160 },
+      { min: 25, max: 30, price: 140 },
+      { min: 31, max: 999, price: 120 }
+    ]
+  },
+  "mercedes-g-class": {
+    name: "Mercedes G Class",
+    class: "Business",
+    tariffs: [
+      { min: 1, max: 3, price: 240 },
+      { min: 4, max: 7, price: 230 },
+      { min: 8, max: 15, price: 210 },
+      { min: 16, max: 24, price: 200 },
+      { min: 25, max: 30, price: 180 },
+      { min: 31, max: 999, price: 160 }
+    ]
+  },
+  "mercedes-s-class": {
+    name: "Mercedes S Class",
+    class: "Business",
+    tariffs: [
+      { min: 1, max: 3, price: 230 },
+      { min: 4, max: 7, price: 220 },
+      { min: 8, max: 15, price: 200 },
+      { min: 16, max: 24, price: 190 },
+      { min: 25, max: 30, price: 170 },
+      { min: 31, max: 999, price: 150 }
+    ]
+  },
+  "range-rover-vogue": {
+    name: "Range Rover Vogue",
+    class: "Business",
+    tariffs: [
+      { min: 1, max: 3, price: 230 },
+      { min: 4, max: 7, price: 220 },
+      { min: 8, max: 15, price: 200 },
+      { min: 16, max: 24, price: 190 },
+      { min: 25, max: 30, price: 170 },
+      { min: 31, max: 999, price: 150 }
+    ]
+  },
+  "toyota-rav-4": {
+    name: "Toyota Rav 4",
+    class: "SUV",
+    tariffs: [
+      { min: 1, max: 3, price: 85 },
+      { min: 4, max: 7, price: 75 },
+      { min: 8, max: 15, price: 70 },
+      { min: 16, max: 24, price: 65 },
+      { min: 25, max: 30, price: 60 },
+      { min: 31, max: 999, price: 59 }
+    ]
+  },
+  "toyota-prado": {
+    name: "Toyota Prado",
+    class: "SUV",
+    tariffs: [
+      { min: 1, max: 3, price: 110 },
+      { min: 4, max: 7, price: 105 },
+      { min: 8, max: 15, price: 100 },
+      { min: 16, max: 24, price: 95 },
+      { min: 25, max: 30, price: 90 },
+      { min: 31, max: 999, price: 89 }
+    ]
+  },
+  "toyota-frontlander": {
+    name: "Toyota Frontlander",
+    class: "SUV",
+    tariffs: [
+      { min: 1, max: 3, price: 80 },
+      { min: 4, max: 7, price: 75 },
+      { min: 8, max: 15, price: 70 },
+      { min: 16, max: 24, price: 65 },
+      { min: 25, max: 30, price: 60 },
+      { min: 31, max: 999, price: 59 }
+    ]
+  },
+  "hyundai-azera": {
+    name: "Hyundai Azera",
+    class: "Comfort",
+    tariffs: [
+      { min: 1, max: 3, price: 85 },
+      { min: 4, max: 7, price: 80 },
+      { min: 8, max: 15, price: 75 },
+      { min: 16, max: 24, price: 70 },
+      { min: 25, max: 30, price: 65 },
+      { min: 31, max: 999, price: 60 }
+    ]
+  },
+  "changan-q05": {
+    name: "Changan Q05",
+    class: "SUV",
+    tariffs: [
+      { min: 1, max: 3, price: 90 },
+      { min: 4, max: 7, price: 85 },
+      { min: 8, max: 15, price: 80 },
+      { min: 16, max: 24, price: 75 },
+      { min: 25, max: 30, price: 70 },
+      { min: 31, max: 999, price: 69 }
+    ]
+  },
+  "hyundai-accent-2013": {
+    name: "Hyundai Accent",
+    class: "Econom (2013–2015)",
+    tariffs: [
+      { min: 1, max: 3, price: 55 },
+      { min: 4, max: 7, price: 50 },
+      { min: 8, max: 15, price: 45 },
+      { min: 16, max: 24, price: 40 },
+      { min: 25, max: 30, price: 40 },
+      { min: 31, max: 999, price: 39 }
+    ]
+  },
+  "kia-rio-2013": {
+    name: "Kia Rio",
+    class: "Econom (2013–2015)",
+    tariffs: [
+      { min: 1, max: 3, price: 35 },
+      { min: 4, max: 7, price: 33 },
+      { min: 8, max: 15, price: 30 },
+      { min: 16, max: 24, price: 28 },
+      { min: 25, max: 30, price: 25 },
+      { min: 31, max: 999, price: 25 }
+    ]
+  },
+  "hyundai-elantra-2016": {
+    name: "Hyundai Elantra",
+    class: "Econom (2016–2018)",
+    tariffs: [
+      { min: 1, max: 3, price: 38 },
+      { min: 4, max: 7, price: 36 },
+      { min: 8, max: 15, price: 33 },
+      { min: 16, max: 24, price: 30 },
+      { min: 25, max: 30, price: 27 },
+      { min: 31, max: 999, price: 27 }
+    ]
+  },
+  "kia-forte-2019": {
+    name: "Kia Forte",
+    class: "Econom (2019–2020)",
+    tariffs: [
+      { min: 1, max: 3, price: 40 },
+      { min: 4, max: 7, price: 38 },
+      { min: 8, max: 15, price: 35 },
+      { min: 16, max: 24, price: 32 },
+      { min: 25, max: 30, price: 30 },
+      { min: 31, max: 999, price: 30 }
+    ]
+  },
+  "chevrolet-cruze-2021": {
+    name: "Chevrolet Cruze",
+    class: "Econom (2021–2023)",
+    tariffs: [
+      { min: 1, max: 3, price: 55 },
+      { min: 4, max: 7, price: 50 },
+      { min: 8, max: 15, price: 45 },
+      { min: 16, max: 24, price: 40 },
+      { min: 25, max: 30, price: 40 },
+      { min: 31, max: 999, price: 39 }
+    ]
+  },
+  "hyundai-ix35-2019": {
+    name: "Hyundai Ix35",
+    class: "SUV (2019–2020)",
+    tariffs: [
+      { min: 1, max: 3, price: 70 },
+      { min: 4, max: 7, price: 65 },
+      { min: 8, max: 15, price: 60 },
+      { min: 16, max: 24, price: 55 },
+      { min: 25, max: 30, price: 50 },
+      { min: 31, max: 999, price: 49 }
+    ]
+  },
+  "kia-sportage-2016": {
+    name: "Kia Sportage",
+    class: "SUV (2016–2018)",
+    tariffs: [
+      { min: 1, max: 3, price: 70 },
+      { min: 4, max: 7, price: 65 },
+      { min: 8, max: 15, price: 60 },
+      { min: 16, max: 24, price: 55 },
+      { min: 25, max: 30, price: 50 },
+      { min: 31, max: 999, price: 49 }
+    ]
+  },
+  "hyundai-santafe-2019-diesel": {
+    name: "Hyundai Santa Fe",
+    class: "SUV (2019–2020)",
+    tariffs: [
+      { min: 1, max: 3, price: 80 },
+      { min: 4, max: 7, price: 75 },
+      { min: 8, max: 15, price: 70 },
+      { min: 16, max: 24, price: 65 },
+      { min: 25, max: 30, price: 60 },
+      { min: 31, max: 999, price: 59 }
+    ]
+  },
+  "kia-sorento-2021": {
+    name: "Kia Sorento",
+    class: "SUV (2021–2023)",
+    tariffs: [
+      { min: 1, max: 3, price: 80 },
+      { min: 4, max: 7, price: 75 },
+      { min: 8, max: 15, price: 70 },
+      { min: 16, max: 24, price: 65 },
+      { min: 25, max: 30, price: 60 },
+      { min: 31, max: 999, price: 59 }
+    ]
+  },
+  "kia-optima-2015": {
+    name: "Kia Optima",
+    class: "Comfort (2013–2015)",
+    tariffs: [
+      { min: 1, max: 3, price: 70 },
+      { min: 4, max: 7, price: 65 },
+      { min: 8, max: 15, price: 60 },
+      { min: 16, max: 24, price: 55 },
+      { min: 25, max: 30, price: 50 },
+      { min: 31, max: 999, price: 49 }
+    ]
+  }  
+    };
+
+
+
+const carSelect = document.getElementById("carSelect");
+const daysInput = document.getElementById("daysInput");
+const daysSlider = document.getElementById("daysSlider");
+const carName = document.getElementById("carName");
+const carClass = document.getElementById("carClass");
+const days = document.getElementById("days");
+const dailyPrice = document.getElementById("dailyPrice");
+const range = document.getElementById("range");
+const subtotal = document.getElementById("subtotal");
+const vat = document.getElementById("vat");
+const total = document.getElementById("total");
+const tarifler = document.getElementById("tarifler");
+const summary = document.getElementById("summary");
+
+let currentSliderValue = parseInt(daysSlider.value);
+let targetSliderValue = currentSliderValue;
+
+
+const params = new URLSearchParams(window.location.search);
+if(params.has("car") && cars[params.get("car")]) {
+  carSelect.value = params.get("car");
+}
+if(params.has("days")) {
+  let d = parseInt(params.get("days"));
+  if(d >=1 && d <= 90) {
+    daysInput.value = daysSlider.value = d;
+    targetSliderValue = d;
+  }
+}
+
+
+
+// ===== Slider spring animation =====
+function animateSliderSpring() {
+  currentSliderValue += (targetSliderValue - currentSliderValue) * 0.2;
+  daysSlider.value = currentSliderValue.toFixed(0);
+  if (Math.abs(targetSliderValue - currentSliderValue) > 0.1) {
+    requestAnimationFrame(animateSliderSpring);
+  } else {
+    currentSliderValue = targetSliderValue;
+    daysSlider.value = targetSliderValue;
+  }
+}
+
+// ===== Animate numbers =====
+function animateNumber(element, start, end, duration = 500) {
+  const range = end - start;
+  let startTime = null;
+  function step(timestamp) {
+    if (!startTime) startTime = timestamp;
+    const progress = Math.min((timestamp - startTime) / duration, 1);
+    element.textContent = "AZN " + (start + range * progress).toFixed(2);
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+// ===== Render tariffs =====
+function renderTariffs(car) {
+  tarifler.innerHTML = "";
+  car.tariffs.forEach((t, i) => {
+    const div = document.createElement("div");
+    div.className = "tarif";
+    setTimeout(() => div.classList.add("show"), i * 100);
+    div.innerHTML = `${t.min}–${t.max >= 999 ? "+" : t.max} gün <strong>AZN ${t.price.toFixed(2)}</strong>`;
+    tarifler.appendChild(div);
+  });
+}
+
+// ===== Update calculator =====
+function updateCalculator() {
+  const car = cars[carSelect.value];
+  let d = parseInt(daysInput.value) || 1;
+  if(d < 1) d = 1;
+  if(d > 90) d = 90;
+
+  targetSliderValue = d;
+  animateSliderSpring();
+
+  let tariff = car.tariffs.find(t => d >= t.min && d <= t.max);
+  if (!tariff) tariff = car.tariffs[car.tariffs.length-1];
+
+  const pricePerDay = tariff.price;
+  const sub = d * pricePerDay;
+  const vatVal = +(sub * 0.07).toFixed(2);
+  const totalVal = +(sub + vatVal).toFixed(2);
+
+  carName.textContent = car.name;
+  carClass.textContent = car.class;
+  days.textContent = d + " gün";
+  dailyPrice.textContent = "AZN " + pricePerDay.toFixed(2);
+  range.textContent = tariff.min + "–" + (tariff.max>=999?"+" : tariff.max) + " gün";
+
+  animateNumber(subtotal, parseFloat(subtotal.textContent.replace("AZN ","")) || 0, sub);
+  animateNumber(vat, parseFloat(vat.textContent.replace("AZN ","")) || 0, vatVal);
+  animateNumber(total, parseFloat(total.textContent.replace("AZN ","")) || 0, totalVal);
+
+  Array.from(summary.querySelectorAll("p")).forEach((p, i) => {
+    p.classList.remove("show");
+    setTimeout(() => p.classList.add("show"), i * 150);
+  });
+
+  renderTariffs(car);
+}
+
+// ===== Populate car select =====
+Object.keys(cars).forEach(key => {
+  const option = document.createElement("option");
+  option.value = key;
+  option.textContent = cars[key].name + " (" + cars[key].class + ")";
+  carSelect.appendChild(option);
+});
+
+// ===== Apply URL params =====
+if(params.has("car") && cars[params.get("car")]) carSelect.value = params.get("car");
+if(params.has("days")) {
+  let d = parseInt(params.get("days"));
+  if(d >=1 && d <= 90) daysInput.value = daysSlider.value = d;
+}
+
+    
+
+// ===== Event listeners =====
+carSelect.addEventListener("change", updateCalculator);
+
+daysInput.addEventListener("input", () => { 
+  let val = daysInput.value;
+  if(val === "") { targetSliderValue = 0; return; }
+  val = parseInt(val);
+  if(val > 90) val = 90;
+  if(val < 1) val = 1;
+  daysInput.value = val;
+  targetSliderValue = val;
+  animateSliderSpring();
+  updateCalculator();
+});
+
+daysSlider.addEventListener("input", () => {
+  daysInput.value = daysSlider.value;
+  targetSliderValue = parseInt(daysSlider.value);
+  currentSliderValue = targetSliderValue;
+  updateCalculator();
+});
+
+// ===== iOS keyboard fix =====
+function fixIOSKeyboard() {
+  if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    document.body.addEventListener('focusin', () => { setTimeout(() => { window.scrollTo(0,0); }, 300); });
+    document.body.addEventListener('focusout', () => { setTimeout(() => { window.scrollTo(0,0); }, 300); });
+  }
+}
+fixIOSKeyboard();
+
+updateCalculator();
+  </script>
+</body>
+</html>
