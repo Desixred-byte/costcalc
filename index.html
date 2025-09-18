@@ -4,10 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Carbon Rent a Car</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Poppins", sans-serif;
+      font-family: 'Montserrat', sans-serif;
       background: #ffffff;
       color: #111;
       overflow-x: hidden;
@@ -70,18 +71,9 @@
       box-sizing: border-box;
       background: #fafafa;
       transition: border-color 0.2s ease, transform 0.2s ease;
-    }
-
-    /* iOS Safari select fix */
-    select {
       -webkit-appearance: none;
-      -moz-appearance: none;
       appearance: none;
-      background: #fafafa url("data:image/svg+xml;utf8,<svg fill='%239c0a54' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 12px center;
-      background-size: 16px;
-      padding-right: 36px;
     }
-
     select:focus, input:focus {
       outline: none;
       border-color: #9c0a54;
@@ -91,8 +83,6 @@
     input[type=range] {
       padding: 0;
       height: 6px;
-      -webkit-appearance: none;
-      appearance: none;
       background: #e2e2e2;
       border-radius: 5px;
       margin-top: 12px;
@@ -198,22 +188,16 @@
   <div class="container">
     <h1>crbnrnt.com</h1>
 
-    <!-- Car Selector -->
     <div class="card">
       <h3>Avtomobil seç</h3>
       <label for="carSelect">Avtomobil:</label>
-      <select id="carSelect">
-        <option value="optima">Kia Optima (Comfort 2013–2015)</option>
-        <option value="elantra">Hyundai Elantra (Comfort 2016–2018)</option>
-        <option value="camry">Toyota Camry (Business 2017–2019)</option>
-      </select>
+      <select id="carSelect"></select>
 
       <label for="daysInput">Gün sayı</label>
-      <input type="number" id="daysInput" value="4" min="1" max="60">
-      <input type="range" id="daysSlider" value="4" min="1" max="60">
+      <input type="number" id="daysInput" value="4" min="1" max="90">
+      <input type="range" id="daysSlider" value="4" min="1" max="90">
     </div>
 
-    <!-- Hesablama -->
     <div class="card">
       <h3>Hesablama</h3>
       <div class="summary" id="summary">
@@ -229,7 +213,6 @@
       <button class="btn">✨ Sifarişi davam et</button>
     </div>
 
-    <!-- Tariflər -->
     <div class="card">
       <h3>Tarif pillələri</h3>
       <div class="tarifler" id="tarifler"></div>
@@ -237,43 +220,355 @@
   </div>
 
   <script>
-    const cars = {
-      optima: {
-        name: "Kia Optima",
-        class: "Comfort (2013–2015)",
-        tariffs: [
-          {min:1,max:3,price:70},
-          {min:4,max:7,price:65},
-          {min:8,max:15,price:60},
-          {min:16,max:24,price:55},
-          {min:25,max:30,price:50},
-          {min:31,max:999,price:49}
-        ]
-      },
-      elantra: {
-        name: "Hyundai Elantra",
-        class: "Comfort (2016–2018)",
-        tariffs: [
-          {min:1,max:3,price:60},
-          {min:4,max:7,price:55},
-          {min:8,max:15,price:50},
-          {min:16,max:24,price:48},
-          {min:25,max:30,price:45},
-          {min:31,max:999,price:43}
-        ]
-      },
-      camry: {
-        name: "Toyota Camry",
-        class: "Business (2017–2019)",
-        tariffs: [
-          {min:1,max:3,price:90},
-          {min:4,max:7,price:85},
-          {min:8,max:15,price:80},
-          {min:16,max:24,price:75},
-          {min:25,max:30,price:70},
-          {min:31,max:999,price:65}
-        ]
-      }
+    const cars = { 
+     "mercedes-s-class-maybach": {
+    name: "Mercedes S Class Maybach",
+    class: "Business",
+    tariffs: [
+      { min: 1, max: 3, price: 230 },
+      { min: 4, max: 7, price: 220 },
+      { min: 8, max: 15, price: 200 },
+      { min: 16, max: 24, price: 190 },
+      { min: 25, max: 30, price: 170 },
+      { min: 31, max: 999, price: 150 }
+    ]
+  },
+  "kia-carnival": {
+    name: "Kia Carnival",
+    class: "Miniven",
+    tariffs: [
+      { min: 1, max: 3, price: 130 },
+      { min: 4, max: 7, price: 120 },
+      { min: 8, max: 15, price: 110 },
+      { min: 16, max: 24, price: 100 },
+      { min: 25, max: 30, price: 90 },
+      { min: 31, max: 999, price: 89 }
+    ]
+  },
+  "mercedes-viano": {
+    name: "Mercedes Viano",
+    class: "Miniven",
+    tariffs: [
+      { min: 1, max: 3, price: 140 },
+      { min: 4, max: 7, price: 130 },
+      { min: 8, max: 15, price: 120 },
+      { min: 16, max: 24, price: 110 },
+      { min: 25, max: 30, price: 100 },
+      { min: 31, max: 999, price: 99 }
+    ]
+  },
+  "mercedes-vito": {
+    name: "Mercedes Vito",
+    class: "Miniven",
+    tariffs: [
+      { min: 1, max: 3, price: 130 },
+      { min: 4, max: 7, price: 120 },
+      { min: 8, max: 15, price: 110 },
+      { min: 16, max: 24, price: 100 },
+      { min: 25, max: 30, price: 90 },
+      { min: 31, max: 999, price: 89 }
+    ]
+  },
+  "bmw-f90": {
+    name: "BMW F90",
+    class: "Sport",
+    tariffs: [
+      { min: 1, max: 3, price: 180 },
+      { min: 4, max: 7, price: 170 },
+      { min: 8, max: 15, price: 150 },
+      { min: 16, max: 24, price: 140 },
+      { min: 25, max: 30, price: 120 },
+      { min: 31, max: 999, price: 100 }
+    ]
+  },
+  "bmw-f36-m4": {
+    name: "BMW F36 M4",
+    class: "Sport",
+    tariffs: [
+      { min: 1, max: 3, price: 130 },
+      { min: 4, max: 7, price: 120 },
+      { min: 8, max: 15, price: 110 },
+      { min: 16, max: 24, price: 100 },
+      { min: 25, max: 30, price: 90 },
+      { min: 31, max: 999, price: 89 }
+    ]
+  },
+  "bmw-f10-mtech": {
+    name: "BMW F10 Mtech",
+    class: "Sport",
+    tariffs: [
+      { min: 1, max: 3, price: 130 },
+      { min: 4, max: 7, price: 120 },
+      { min: 8, max: 15, price: 110 },
+      { min: 16, max: 24, price: 100 },
+      { min: 25, max: 30, price: 90 },
+      { min: 31, max: 999, price: 89 }
+    ]
+  },
+  "bmw-f10-m5": {
+    name: "BMW F10 M5",
+    class: "Sport",
+    tariffs: [
+      { min: 1, max: 3, price: 120 },
+      { min: 4, max: 7, price: 110 },
+      { min: 8, max: 15, price: 100 },
+      { min: 16, max: 24, price: 90 },
+      { min: 25, max: 30, price: 80 },
+      { min: 31, max: 999, price: 79 }
+    ]
+  },
+  "ford-mustang": {
+    name: "Ford Mustang",
+    class: "Sport",
+    tariffs: [
+      { min: 1, max: 3, price: 180 },
+      { min: 4, max: 7, price: 170 },
+      { min: 8, max: 15, price: 150 },
+      { min: 16, max: 24, price: 140 },
+      { min: 25, max: 30, price: 120 },
+      { min: 31, max: 999, price: 100 }
+    ]
+  },
+  "defender": {
+    name: "Defender",
+    class: "Business",
+    tariffs: [
+      { min: 1, max: 3, price: 400 },
+      { min: 4, max: 7, price: 390 },
+      { min: 8, max: 15, price: 370 },
+      { min: 16, max: 24, price: 360 },
+      { min: 25, max: 30, price: 340 },
+      { min: 31, max: 999, price: 320 }
+    ]
+  },
+  "mercedes-e-class": {
+    name: "Mercedes E Class",
+    class: "Business",
+    tariffs: [
+      { min: 1, max: 3, price: 200 },
+      { min: 4, max: 7, price: 190 },
+      { min: 8, max: 15, price: 170 },
+      { min: 16, max: 24, price: 160 },
+      { min: 25, max: 30, price: 140 },
+      { min: 31, max: 999, price: 120 }
+    ]
+  },
+  "mercedes-g-class": {
+    name: "Mercedes G Class",
+    class: "Business",
+    tariffs: [
+      { min: 1, max: 3, price: 240 },
+      { min: 4, max: 7, price: 230 },
+      { min: 8, max: 15, price: 210 },
+      { min: 16, max: 24, price: 200 },
+      { min: 25, max: 30, price: 180 },
+      { min: 31, max: 999, price: 160 }
+    ]
+  },
+  "mercedes-s-class": {
+    name: "Mercedes S Class",
+    class: "Business",
+    tariffs: [
+      { min: 1, max: 3, price: 230 },
+      { min: 4, max: 7, price: 220 },
+      { min: 8, max: 15, price: 200 },
+      { min: 16, max: 24, price: 190 },
+      { min: 25, max: 30, price: 170 },
+      { min: 31, max: 999, price: 150 }
+    ]
+  },
+  "range-rover-vogue": {
+    name: "Range Rover Vogue",
+    class: "Business",
+    tariffs: [
+      { min: 1, max: 3, price: 230 },
+      { min: 4, max: 7, price: 220 },
+      { min: 8, max: 15, price: 200 },
+      { min: 16, max: 24, price: 190 },
+      { min: 25, max: 30, price: 170 },
+      { min: 31, max: 999, price: 150 }
+    ]
+  },
+  "toyota-rav-4": {
+    name: "Toyota Rav 4",
+    class: "SUV",
+    tariffs: [
+      { min: 1, max: 3, price: 85 },
+      { min: 4, max: 7, price: 75 },
+      { min: 8, max: 15, price: 70 },
+      { min: 16, max: 24, price: 65 },
+      { min: 25, max: 30, price: 60 },
+      { min: 31, max: 999, price: 59 }
+    ]
+  },
+  "toyota-prado": {
+    name: "Toyota Prado",
+    class: "SUV",
+    tariffs: [
+      { min: 1, max: 3, price: 110 },
+      { min: 4, max: 7, price: 105 },
+      { min: 8, max: 15, price: 100 },
+      { min: 16, max: 24, price: 95 },
+      { min: 25, max: 30, price: 90 },
+      { min: 31, max: 999, price: 89 }
+    ]
+  },
+  "toyota-frontlander": {
+    name: "Toyota Frontlander",
+    class: "SUV",
+    tariffs: [
+      { min: 1, max: 3, price: 80 },
+      { min: 4, max: 7, price: 75 },
+      { min: 8, max: 15, price: 70 },
+      { min: 16, max: 24, price: 65 },
+      { min: 25, max: 30, price: 60 },
+      { min: 31, max: 999, price: 59 }
+    ]
+  },
+  "hyundai-azera": {
+    name: "Hyundai Azera",
+    class: "Comfort",
+    tariffs: [
+      { min: 1, max: 3, price: 85 },
+      { min: 4, max: 7, price: 80 },
+      { min: 8, max: 15, price: 75 },
+      { min: 16, max: 24, price: 70 },
+      { min: 25, max: 30, price: 65 },
+      { min: 31, max: 999, price: 60 }
+    ]
+  },
+  "changan-q05": {
+    name: "Changan Q05",
+    class: "SUV",
+    tariffs: [
+      { min: 1, max: 3, price: 90 },
+      { min: 4, max: 7, price: 85 },
+      { min: 8, max: 15, price: 80 },
+      { min: 16, max: 24, price: 75 },
+      { min: 25, max: 30, price: 70 },
+      { min: 31, max: 999, price: 69 }
+    ]
+  },
+  "hyundai-accent-2013": {
+    name: "Hyundai Accent",
+    class: "Econom (2013–2015)",
+    tariffs: [
+      { min: 1, max: 3, price: 55 },
+      { min: 4, max: 7, price: 50 },
+      { min: 8, max: 15, price: 45 },
+      { min: 16, max: 24, price: 40 },
+      { min: 25, max: 30, price: 40 },
+      { min: 31, max: 999, price: 39 }
+    ]
+  },
+  "kia-rio-2013": {
+    name: "Kia Rio",
+    class: "Econom (2013–2015)",
+    tariffs: [
+      { min: 1, max: 3, price: 35 },
+      { min: 4, max: 7, price: 33 },
+      { min: 8, max: 15, price: 30 },
+      { min: 16, max: 24, price: 28 },
+      { min: 25, max: 30, price: 25 },
+      { min: 31, max: 999, price: 25 }
+    ]
+  },
+  "hyundai-elantra-2016": {
+    name: "Hyundai Elantra",
+    class: "Econom (2016–2018)",
+    tariffs: [
+      { min: 1, max: 3, price: 38 },
+      { min: 4, max: 7, price: 36 },
+      { min: 8, max: 15, price: 33 },
+      { min: 16, max: 24, price: 30 },
+      { min: 25, max: 30, price: 27 },
+      { min: 31, max: 999, price: 27 }
+    ]
+  },
+  "kia-forte-2019": {
+    name: "Kia Forte",
+    class: "Econom (2019–2020)",
+    tariffs: [
+      { min: 1, max: 3, price: 40 },
+      { min: 4, max: 7, price: 38 },
+      { min: 8, max: 15, price: 35 },
+      { min: 16, max: 24, price: 32 },
+      { min: 25, max: 30, price: 30 },
+      { min: 31, max: 999, price: 30 }
+    ]
+  },
+  "chevrolet-cruze-2021": {
+    name: "Chevrolet Cruze",
+    class: "Econom (2021–2023)",
+    tariffs: [
+      { min: 1, max: 3, price: 55 },
+      { min: 4, max: 7, price: 50 },
+      { min: 8, max: 15, price: 45 },
+      { min: 16, max: 24, price: 40 },
+      { min: 25, max: 30, price: 40 },
+      { min: 31, max: 999, price: 39 }
+    ]
+  },
+  "hyundai-ix35-2019": {
+    name: "Hyundai Ix35",
+    class: "SUV (2019–2020)",
+    tariffs: [
+      { min: 1, max: 3, price: 70 },
+      { min: 4, max: 7, price: 65 },
+      { min: 8, max: 15, price: 60 },
+      { min: 16, max: 24, price: 55 },
+      { min: 25, max: 30, price: 50 },
+      { min: 31, max: 999, price: 49 }
+    ]
+  },
+  "kia-sportage-2016": {
+    name: "Kia Sportage",
+    class: "SUV (2016–2018)",
+    tariffs: [
+      { min: 1, max: 3, price: 70 },
+      { min: 4, max: 7, price: 65 },
+      { min: 8, max: 15, price: 60 },
+      { min: 16, max: 24, price: 55 },
+      { min: 25, max: 30, price: 50 },
+      { min: 31, max: 999, price: 49 }
+    ]
+  },
+  "hyundai-santafe-2019-diesel": {
+    name: "Hyundai Santa Fe",
+    class: "SUV (2019–2020)",
+    tariffs: [
+      { min: 1, max: 3, price: 80 },
+      { min: 4, max: 7, price: 75 },
+      { min: 8, max: 15, price: 70 },
+      { min: 16, max: 24, price: 65 },
+      { min: 25, max: 30, price: 60 },
+      { min: 31, max: 999, price: 59 }
+    ]
+  },
+  "kia-sorento-2021": {
+    name: "Kia Sorento",
+    class: "SUV (2021–2023)",
+    tariffs: [
+      { min: 1, max: 3, price: 80 },
+      { min: 4, max: 7, price: 75 },
+      { min: 8, max: 15, price: 70 },
+      { min: 16, max: 24, price: 65 },
+      { min: 25, max: 30, price: 60 },
+      { min: 31, max: 999, price: 59 }
+    ]
+  },
+  "kia-optima-2015": {
+    name: "Kia Optima",
+    class: "Comfort (2013–2015)",
+    tariffs: [
+      { min: 1, max: 3, price: 70 },
+      { min: 4, max: 7, price: 65 },
+      { min: 8, max: 15, price: 60 },
+      { min: 16, max: 24, price: 55 },
+      { min: 25, max: 30, price: 50 },
+      { min: 31, max: 999, price: 49 }
+    ]
+  }  
     };
 
     const carSelect = document.getElementById("carSelect");
@@ -318,9 +613,8 @@
     function updateCalculator() {
       const car = cars[carSelect.value];
       let d = parseInt(daysInput.value) || 1;
-      if (d < 1) d = 1;
-      if (d > 60) d = 60;
-      daysInput.value = d;
+      if(d < 1) d = 1;
+      if(d > 90) d = 90;
 
       targetSliderValue = d;
       animateSlider();
@@ -348,38 +642,38 @@
       });
 
       renderTariffs(car);
-
-      // Update URL dynamically
-      const newUrl = new URL(window.location.href);
-      newUrl.searchParams.set("ref", carSelect.value);
-      newUrl.searchParams.set("days", d);
-      window.history.replaceState({}, '', newUrl);
     }
 
-    // Events
+    // Populate car select dynamically
+    Object.keys(cars).forEach(key => {
+      const option = document.createElement("option");
+      option.value = key;
+      option.textContent = cars[key].name + " (" + cars[key].class + ")";
+      carSelect.appendChild(option);
+    });
+
+    // Check URL query params ?car=xxx&days=xx
+    const params = new URLSearchParams(window.location.search);
+    if(params.has("car") && cars[params.get("car")]) carSelect.value = params.get("car");
+    if(params.has("days")) {
+      let d = parseInt(params.get("days"));
+      if(d >=1 && d <= 90) daysInput.value = daysSlider.value = d;
+    }
+
     carSelect.addEventListener("change", updateCalculator);
-    daysInput.addEventListener("input", updateCalculator);
+    daysInput.addEventListener("input", () => { 
+      let val = parseInt(daysInput.value) || 1;
+      if(val > 90) val = 90;
+      daysInput.value = val;
+      targetSliderValue = val;
+      updateCalculator();
+    });
     daysSlider.addEventListener("input", () => {
       daysInput.value = daysSlider.value;
       targetSliderValue = parseInt(daysSlider.value);
       currentSliderValue = targetSliderValue;
       updateCalculator();
     });
-
-    // --- Auto select from URL ---
-    const urlParams = new URLSearchParams(window.location.search);
-    const refCar = urlParams.get("ref");
-    const refDays = urlParams.get("days");
-
-    if (refCar && cars[refCar]) carSelect.value = refCar;
-    if (refDays) {
-      let daysVal = parseInt(refDays);
-      if (isNaN(daysVal)) daysVal = 1;
-      if (daysVal < 1) daysVal = 1;
-      if (daysVal > 60) daysVal = 60;
-      daysInput.value = daysVal;
-      daysSlider.value = daysVal;
-    }
 
     updateCalculator();
   </script>
