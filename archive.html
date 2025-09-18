@@ -666,6 +666,9 @@ input[type=range]:active::-moz-range-thumb {
   }  
     };
 
+const cars = { 
+  /* ... all your cars data stays the same ... */
+};
 
 const carSelect = document.getElementById("carSelect");
 const daysInput = document.getElementById("daysInput");
@@ -684,7 +687,20 @@ const summary = document.getElementById("summary");
 let currentSliderValue = parseInt(daysSlider.value);
 let targetSliderValue = currentSliderValue;
 
-// Slider spring animation
+// ===== Display ref if exists =====
+const params = new URLSearchParams(window.location.search);
+const refParam = params.get('ref');
+if (refParam) {
+  const refDiv = document.createElement("div");
+  refDiv.style.textAlign = "center";
+  refDiv.style.margin = "12px 0";
+  refDiv.style.fontWeight = "500";
+  refDiv.style.color = "#9c0a54";
+  refDiv.textContent = `Referred by: ${refParam}`;
+  document.querySelector(".container").prepend(refDiv);
+}
+
+// ===== Slider spring animation =====
 function animateSliderSpring() {
   currentSliderValue += (targetSliderValue - currentSliderValue) * 0.2;
   daysSlider.value = currentSliderValue.toFixed(0);
@@ -696,23 +712,20 @@ function animateSliderSpring() {
   }
 }
 
-// Animate number counting
+// ===== Animate numbers =====
 function animateNumber(element, start, end, duration = 500) {
   const range = end - start;
   let startTime = null;
-
   function step(timestamp) {
     if (!startTime) startTime = timestamp;
     const progress = Math.min((timestamp - startTime) / duration, 1);
     element.textContent = "AZN " + (start + range * progress).toFixed(2);
-    if (progress < 1) {
-      requestAnimationFrame(step);
-    }
+    if (progress < 1) requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
 }
 
-// Render tariffs
+// ===== Render tariffs =====
 function renderTariffs(car) {
   tarifler.innerHTML = "";
   car.tariffs.forEach((t, i) => {
@@ -724,10 +737,10 @@ function renderTariffs(car) {
   });
 }
 
-// Update calculator
+// ===== Update calculator =====
 function updateCalculator() {
   const car = cars[carSelect.value];
-  let d = parseInt(daysInput.value) || 0;
+  let d = parseInt(daysInput.value) || 1;
   if(d < 1) d = 1;
   if(d > 90) d = 90;
 
@@ -760,7 +773,7 @@ function updateCalculator() {
   renderTariffs(car);
 }
 
-// Populate car select
+// ===== Populate car select =====
 Object.keys(cars).forEach(key => {
   const option = document.createElement("option");
   option.value = key;
@@ -768,20 +781,19 @@ Object.keys(cars).forEach(key => {
   carSelect.appendChild(option);
 });
 
-// URL params
-const params = new URLSearchParams(window.location.search);
+// ===== Apply URL params =====
 if(params.has("car") && cars[params.get("car")]) carSelect.value = params.get("car");
 if(params.has("days")) {
   let d = parseInt(params.get("days"));
   if(d >=1 && d <= 90) daysInput.value = daysSlider.value = d;
 }
 
-// Input & slider events
+// ===== Event listeners =====
 carSelect.addEventListener("change", updateCalculator);
 
 daysInput.addEventListener("input", () => { 
   let val = daysInput.value;
-  if(val === "") { targetSliderValue = 0; return; } // allow clearing
+  if(val === "") { targetSliderValue = 0; return; }
   val = parseInt(val);
   if(val > 90) val = 90;
   if(val < 1) val = 1;
@@ -798,22 +810,16 @@ daysSlider.addEventListener("input", () => {
   updateCalculator();
 });
 
-// iOS keyboard fix
+// ===== iOS keyboard fix =====
 function fixIOSKeyboard() {
   if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    document.body.addEventListener('focusin', () => {
-      setTimeout(() => { window.scrollTo(0,0); }, 300);
-    });
-    document.body.addEventListener('focusout', () => {
-      setTimeout(() => { window.scrollTo(0,0); }, 300);
-    });
+    document.body.addEventListener('focusin', () => { setTimeout(() => { window.scrollTo(0,0); }, 300); });
+    document.body.addEventListener('focusout', () => { setTimeout(() => { window.scrollTo(0,0); }, 300); });
   }
 }
 fixIOSKeyboard();
 
 updateCalculator();
-
-
   </script>
 </body>
 </html>
