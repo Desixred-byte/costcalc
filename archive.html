@@ -685,18 +685,20 @@ const summary = document.getElementById("summary");
 let currentSliderValue = parseInt(daysSlider.value);
 let targetSliderValue = currentSliderValue;
 
-// ===== Display ref if exists =====
+
 const params = new URLSearchParams(window.location.search);
-const refParam = params.get('ref');
-if (refParam) {
-  const refDiv = document.createElement("div");
-  refDiv.style.textAlign = "center";
-  refDiv.style.margin = "12px 0";
-  refDiv.style.fontWeight = "500";
-  refDiv.style.color = "#9c0a54";
-  refDiv.textContent = `Referred by: ${refParam}`;
-  document.querySelector(".container").prepend(refDiv);
+if(params.has("car") && cars[params.get("car")]) {
+  carSelect.value = params.get("car");
 }
+if(params.has("days")) {
+  let d = parseInt(params.get("days"));
+  if(d >=1 && d <= 90) {
+    daysInput.value = daysSlider.value = d;
+    targetSliderValue = d;
+  }
+}
+
+
 
 // ===== Slider spring animation =====
 function animateSliderSpring() {
@@ -785,6 +787,8 @@ if(params.has("days")) {
   let d = parseInt(params.get("days"));
   if(d >=1 && d <= 90) daysInput.value = daysSlider.value = d;
 }
+
+    
 
 // ===== Event listeners =====
 carSelect.addEventListener("change", updateCalculator);
