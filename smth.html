@@ -39,14 +39,49 @@ input[type=range]:active::-moz-range-thumb {transform:scale(1.4);}
 .tarif {background:#fafafa; border-radius:14px; box-shadow:inset 0 1px 3px rgba(0,0,0,0.05); padding:14px; text-align:center; font-size:14px; transition:all 0.3s ease; opacity:0; transform:scale(0.95) translateY(10px);}
 .tarif.show {opacity:1; transform:scale(1) translateY(0);}
 .tarif strong {display:block; margin-top:4px; color:#9c0a54; font-size:15px;}
-.currency-toggle {display:flex;gap:8px;margin-bottom:20px;}
-.currency-btn {padding:6px 14px;border-radius:12px;border:1px solid #9c0a54;background:#fff;color:#9c0a54;font-weight:600;cursor:pointer;transition:all 0.2s;}
-.currency-btn.active {background:#9c0a54;color:#fff;}
-.currency-btn:hover:not(.active){background:#f0d2e0;}
-.language-toggle {display:flex;gap:6px;align-items:center;}
-.language-toggle span {padding:4px 10px;border-radius:10px;cursor:pointer;border:1px solid #9c0a54;color:#9c0a54;font-weight:600;}
-.language-toggle span.active {background:#9c0a54;color:#fff;}
 @keyframes shimmer {0%{left:-60%;}100%{left:120%;}}
+
+/* ================= Telegram-style Buttons ================= */
+.currency-toggle, .language-toggle {
+  position: relative;
+  display: flex;
+  gap: 0;
+  background: #f0f0f5;
+  border-radius: 40px;
+  padding: 4px;
+  box-shadow: inset 0 3px 5px rgba(0,0,0,0.05);
+}
+
+.currency-toggle button, .language-toggle span {
+  position: relative;
+  flex: 1;
+  text-align: center;
+  padding: 8px 16px;
+  border-radius: 40px;
+  border: none;
+  background: transparent;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 2;
+  transition: color 0.3s ease;
+}
+
+.currency-toggle button.active, .language-toggle span.active {
+  color: #fff;
+}
+
+.currency-toggle .slider, .language-toggle .slider {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  width: calc(100% / 3);
+  height: calc(100% - 8px);
+  background: linear-gradient(135deg, #9c0a54, #7b0045);
+  border-radius: 40px;
+  z-index: 1;
+  transition: all 0.35s cubic-bezier(0.22,1,0.36,1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
   </style>
 </head>
 <body>
