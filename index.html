@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carbon Rent a Car</title>
+  <title>Carbon Rent Cost Calculator</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/phosphor-icons"></script>
   <style>
     body {
       margin: 0;
@@ -20,13 +22,25 @@
       padding: 20px;
     }
 
+    /* 3D Title */
     h1 {
-      color: #111;
       text-align: center;
-      font-weight: 700;
+      font-weight: 800;
       font-size: 28px;
-      margin-bottom: 25px;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, #9c0a54, #7b0045);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 2px 2px 8px rgba(156, 10, 84, 0.4);
       animation: fadeDown 0.8s ease forwards;
+    }
+    .subtitle {
+      text-align: center;
+      font-size: 15px;
+      font-weight: 500;
+      color: #444;
+      margin-bottom: 25px;
+      opacity: 0.9;
     }
 
     .card {
@@ -37,7 +51,6 @@
       padding: 24px;
       margin: 20px 0;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      transform-style: preserve-3d;
       animation: fadeUp 0.7s ease forwards;
     }
     .card:hover {
@@ -52,6 +65,9 @@
       font-weight: 600;
       font-size: 19px;
       color: #222;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     label {
@@ -61,6 +77,7 @@
       color: #444;
     }
 
+    /* Car Selector Custom */
     select, input[type=number], input[type=range] {
       width: 100%;
       padding: 12px;
@@ -71,8 +88,14 @@
       box-sizing: border-box;
       background: #fafafa;
       transition: border-color 0.2s ease, transform 0.2s ease;
-      -webkit-appearance: none;
       appearance: none;
+    }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%239c0a54' viewBox='0 0 256 256'%3E%3Cpath d='M128 176a8 8 0 0 1-5.66-2.34l-80-80a8 8 0 0 1 11.32-11.32L128 157.37l74.34-74.34a8 8 0 0 1 11.32 11.32l-80 80A8 8 0 0 1 128 176z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      background-size: 14px;
+      padding-right: 36px;
     }
     select:focus, input:focus {
       outline: none;
@@ -135,8 +158,6 @@
       margin-top: 18px;
       box-shadow: 0 6px 14px rgba(0,0,0,0.18);
       transition: all 0.25s ease;
-      position: relative;
-      overflow: hidden;
     }
     .btn:hover {
       transform: translateY(-3px);
@@ -186,20 +207,21 @@
 </head>
 <body>
   <div class="container">
-    <h1>crbnrnt.com</h1>
+    <h1>Carbon Rent</h1>
+    <div class="subtitle">Cost Calculator – Drive Smart</div>
 
     <div class="card">
-      <h3>Avtomobil seç</h3>
+      <h3><i class="ph-car"></i> Avtomobil seç</h3>
       <label for="carSelect">Avtomobil:</label>
       <select id="carSelect"></select>
 
-      <label for="daysInput">Gün sayı</label>
+      <label for="daysInput"><i class="ph-calendar"></i> Gün sayı</label>
       <input type="number" id="daysInput" value="4" min="1" max="90">
       <input type="range" id="daysSlider" value="4" min="1" max="90">
     </div>
 
     <div class="card">
-      <h3>Hesablama</h3>
+      <h3><i class="ph-calculator"></i> Hesablama</h3>
       <div class="summary" id="summary">
         <p><strong>Avtomobil:</strong> <span id="carName"></span></p>
         <p><strong>Sinif:</strong> <span id="carClass"></span></p>
@@ -210,15 +232,14 @@
         <p><strong>ƏDV (7%):</strong> <span id="vat"></span></p>
         <p class="total">Cəmi: <span id="total"></span></p>
       </div>
-      <button class="btn">✨ Sifarişi davam et</button>
+      <button class="btn"><i class="ph-arrow-right"></i> Sifarişi davam et</button>
     </div>
 
     <div class="card">
-      <h3>Tarif pillələri</h3>
+      <h3><i class="ph-currency-circle-dollar"></i> Tarif pillələri</h3>
       <div class="tarifler" id="tarifler"></div>
     </div>
   </div>
-
   <script>
     const cars = { 
      "mercedes-s-class-maybach": {
