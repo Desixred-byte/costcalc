@@ -69,40 +69,47 @@ input[type=range]:active::-moz-range-thumb {transform:scale(1.4);}
   <div class="switch" id="currencySwitch">
     <div class="toggle" id="toggle">AZN</div>
     <div class="option left">AZN</div>
-    <div class="option right">EUR</div>
+    <div class="option right">USD</div>
   </div>
 </div>
 
+<!-- Language Toggle -->
+<div class="language-toggle">
+  <span data-lang="az" class="active">AZ</span>
+  <span data-lang="en">EN</span>
+  <span data-lang="ru">RU</span>
+</div>
+
 <div class="card">
-<h3><i class="ph-car"></i> Avtomobil seç</h3>
-<label for="carSelect">Avtomobil:</label>
+<h3><i class="ph-car"></i> <span id="carTitle">Avtomobil seç</span></h3>
+<label for="carSelect" id="carLabel">Avtomobil:</label>
 <select id="carSelect"></select>
 
-<label for="daysInput"><i class="ph-calendar"></i> Gün sayı</label>
+<label for="daysInput"><i class="ph-calendar"></i> <span id="daysLabel">Gün sayı</span></label>
 <input type="number" id="daysInput" value="4" min="1" max="90">
 <input type="range" id="daysSlider" value="4" min="1" max="90">
 </div>
 
 <div class="card">
-<h3><i class="ph-calculator"></i> Hesablama</h3>
+<h3><i class="ph-calculator"></i> <span id="summaryTitle">Hesablama</span></h3>
 <div class="summary" id="summary">
-<p><strong>Avtomobil:</strong> <span id="carName"></span></p>
-<p><strong>Sinif:</strong> <span id="carClass"></span></p>
-<p><strong>Gün:</strong> <span id="days"></span></p>
-<p><strong>Gündəlik tarif:</strong> <span id="dailyPrice"></span></p>
-<p><strong>Aralıq:</strong> <span id="range"></span></p>
-<p><strong>Ara cəm:</strong> <span id="subtotal"></span></p>
-<p><strong>ƏDV (7%):</strong> <span id="vat"></span></p>
-<p class="total">Cəmi: <span id="total"></span></p>
+<p><strong id="carText">Avtomobil:</strong> <span id="carName"></span></p>
+<p><strong id="classText">Sinif:</strong> <span id="carClass"></span></p>
+<p><strong id="daysText">Gün:</strong> <span id="days"></span></p>
+<p><strong id="dailyText">Gündəlik tarif:</strong> <span id="dailyPrice"></span></p>
+<p><strong id="rangeText">Aralıq:</strong> <span id="range"></span></p>
+<p><strong id="subtotalText">Ara cəm:</strong> <span id="subtotal"></span></p>
+<p><strong id="vatText">ƏDV (7%):</strong> <span id="vat"></span></p>
+<p class="total" id="totalText">Cəmi: <span id="total"></span></p>
 </div>
-<button class="btn"><i class="ph-arrow-right"></i> Sifarişi davam et</button>
+<button class="btn" id="orderBtn"><i class="ph-arrow-right"></i> Sifarişi davam et</button>
 </div>
 
 <div class="card">
-<h3><i class="ph-currency-circle-dollar"></i> Tarif pillələri</h3>
+<h3><i class="ph-currency-circle-dollar"></i> <span id="tariffsTitle">Tarif pillələri</span></h3>
 <div class="tarifler" id="tarifler"></div>
 </div>
-</div>
+
   <script>
     const cars = { 
      "mercedes-s-class-maybach": {
@@ -457,6 +464,12 @@ input[type=range]:active::-moz-range-thumb {transform:scale(1.4);}
 
 
 
+const translations = {
+  az: {carTitle:"Avtomobil seç", carLabel:"Avtomobil:", daysLabel:"Gün sayı", summaryTitle:"Hesablama", carText:"Avtomobil:", classText:"Sinif:", daysText:"Gün:", dailyText:"Gündəlik tarif:", rangeText:"Aralıq:", subtotalText:"Ara cəm:", vatText:"ƏDV (7%):", totalText:"Cəmi:", tariffsTitle:"Tarif pillələri", orderBtn:"Sifarişi davam et"},
+  en: {carTitle:"Select Car", carLabel:"Car:", daysLabel:"Number of Days", summaryTitle:"Calculation", carText:"Car:", classText:"Class:", daysText:"Days:", dailyText:"Daily Rate:", rangeText:"Range:", subtotalText:"Subtotal:", vatText:"VAT (7%):", totalText:"Total:", tariffsTitle:"Tariff Levels", orderBtn:"Continue Order"},
+  ru: {carTitle:"Выберите Авто", carLabel:"Авто:", daysLabel:"Количество дней", summaryTitle:"Расчет", carText:"Авто:", classText:"Класс:", daysText:"Дни:", dailyText:"Дневная ставка:", rangeText:"Диапазон:", subtotalText:"Промежуточно:", vatText:"НДС (7%):", totalText:"Итого:", tariffsTitle:"Уровни тарифов", orderBtn:"Продолжить заказ"}
+};
+
 const carSelect = document.getElementById("carSelect");
 const daysInput = document.getElementById("daysInput");
 const daysSlider = document.getElementById("daysSlider");
@@ -464,16 +477,32 @@ const carName = document.getElementById("carName");
 const carClass = document.getElementById("carClass");
 const days = document.getElementById("days");
 const dailyPrice = document.getElementById("dailyPrice");
-const range = document.getElementById("range");
+const rangeElem = document.getElementById("range");
 const subtotal = document.getElementById("subtotal");
 const vat = document.getElementById("vat");
 const total = document.getElementById("total");
 const tarifler = document.getElementById("tarifler");
 const summary = document.getElementById("summary");
 
+const carTitle = document.getElementById("carTitle");
+const carLabel = document.getElementById("carLabel");
+const daysLabel = document.getElementById("daysLabel");
+const summaryTitle = document.getElementById("summaryTitle");
+const carText = document.getElementById("carText");
+const classText = document.getElementById("classText");
+const daysText = document.getElementById("daysText");
+const dailyText = document.getElementById("dailyText");
+const rangeText = document.getElementById("rangeText");
+const subtotalText = document.getElementById("subtotalText");
+const vatText = document.getElementById("vatText");
+const totalText = document.getElementById("totalText");
+const tariffsTitle = document.getElementById("tariffsTitle");
+const orderBtn = document.getElementById("orderBtn");
+
 let currentSliderValue = parseInt(daysSlider.value);
 let targetSliderValue = currentSliderValue;
 let currentCurrency = 'AZN';
+let currentLang = 'az';
 const exchangeRate = 0.52; // AZN → EUR
 
 // ===== Populate car select =====
@@ -492,8 +521,8 @@ function animateSliderSpring() {
   else currentSliderValue = targetSliderValue;
 }
 
-// ===== Animate numbers with currency =====
-function formatCurrency(val) { return currentCurrency==='AZN'? `AZN ${val.toFixed(2)}` : `€ ${(val*exchangeRate).toFixed(2)}`; }
+// ===== Animate numbers =====
+function formatCurrency(val){ return currentCurrency==='AZN'? `AZN ${val.toFixed(2)}` : `€ ${(val*exchangeRate).toFixed(2)}`; }
 function animateNumber(element, start, end, duration=500){
   const range = end-start;
   let startTime = null;
@@ -529,14 +558,16 @@ function updateCalculator(){
   const sub = d*pricePerDay;
   const vatVal = +(sub*0.07).toFixed(2);
   const totalVal = +(sub+vatVal).toFixed(2);
+
   carName.textContent=car.name;
   carClass.textContent=car.class;
   days.textContent=d+" gün";
   dailyPrice.textContent=formatCurrency(pricePerDay);
-  range.textContent=tariff.min+"–"+(tariff.max>=999?'+':tariff.max)+" gün";
+  rangeElem.textContent=tariff.min+"–"+(tariff.max>=999?'+':tariff.max)+" gün";
   animateNumber(subtotal, parseFloat(subtotal.textContent.replace(/[^0-9.]/g,""))||0, sub);
   animateNumber(vat, parseFloat(vat.textContent.replace(/[^0-9.]/g,""))||0, vatVal);
   animateNumber(total, parseFloat(total.textContent.replace(/[^0-9.]/g,""))||0, totalVal);
+
   Array.from(summary.querySelectorAll("p")).forEach((p,i)=>{p.classList.remove("show");setTimeout(()=>p.classList.add("show"),i*150);});
   renderTariffs(car);
 }
@@ -554,6 +585,30 @@ currencySwitch.addEventListener("click",()=>{
   toggle.style.left=currentCurrency==='AZN'?'2px':'62px';
   toggle.textContent=currentCurrency;
   updateCalculator();
+});
+
+// ===== Language Switch =====
+document.querySelectorAll(".language-toggle span").forEach(el=>{
+  el.addEventListener("click", ()=>{
+    currentLang = el.dataset.lang;
+    document.querySelectorAll(".language-toggle span").forEach(s=>s.classList.remove("active"));
+    el.classList.add("active");
+    const t = translations[currentLang];
+    carTitle.textContent = t.carTitle;
+    carLabel.textContent = t.carLabel;
+    daysLabel.textContent = t.daysLabel;
+    summaryTitle.textContent = t.summaryTitle;
+    carText.textContent = t.carText;
+    classText.textContent = t.classText;
+    daysText.textContent = t.daysText;
+    dailyText.textContent = t.dailyText;
+    rangeText.textContent = t.rangeText;
+    subtotalText.textContent = t.subtotalText;
+    vatText.textContent = t.vatText;
+    totalText.textContent = t.totalText;
+    tariffsTitle.textContent = t.tariffsTitle;
+    orderBtn.textContent = t.orderBtn;
+  });
 });
 
 updateCalculator();
