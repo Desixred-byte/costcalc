@@ -7,7 +7,7 @@
   <style>
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Poppins", sans-serif;
+      font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Poppins", sans-serif;
       background: #ffffff;
       color: #111;
       overflow-x: hidden;
@@ -28,7 +28,6 @@
       animation: fadeDown 0.8s ease forwards;
     }
 
-    /* 3D Card */
     .card {
       background: #fff;
       border-radius: 24px;
@@ -72,6 +71,17 @@
       background: #fafafa;
       transition: border-color 0.2s ease, transform 0.2s ease;
     }
+
+    /* iOS Safari select fix */
+    select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background: #fafafa url("data:image/svg+xml;utf8,<svg fill='%239c0a54' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 12px center;
+      background-size: 16px;
+      padding-right: 36px;
+    }
+
     select:focus, input:focus {
       outline: none;
       border-color: #9c0a54;
@@ -102,7 +112,6 @@
       transform: scale(1.1);
     }
 
-    /* Summary animation */
     .summary p {
       margin: 6px 0;
       font-size: 15px;
@@ -121,7 +130,6 @@
       margin-top: 14px;
     }
 
-    /* Gradient Accent Button */
     .btn {
       display: block;
       width: 100%;
@@ -148,7 +156,6 @@
       transform: scale(0.97);
     }
 
-    /* Tariff Cards */
     .tarifler {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -177,7 +184,6 @@
       font-size: 15px;
     }
 
-    /* Animations */
     @keyframes fadeUp {
       from {opacity:0; transform: translateY(20px);}
       to {opacity:1; transform: translateY(0);}
@@ -186,21 +192,11 @@
       from {opacity:0; transform: translateY(-20px);}
       to {opacity:1; transform: translateY(0);}
     }
-
-     select {
-    -webkit-appearance: none; /* remove iOS/Safari default */
-    -moz-appearance: none;
-    appearance: none;
-    background: #fafafa url("data:image/svg+xml;utf8,<svg fill='%239c0a54' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 12px center;
-    background-size: 16px;
-    padding-right: 36px; /* space for arrow */
-  }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>crbnrnt.com</h1>
-    
 
     <!-- Car Selector -->
     <div class="card">
@@ -280,93 +276,112 @@
       }
     };
 
-   const carSelect = document.getElementById("carSelect");
-  const daysInput = document.getElementById("daysInput");
-  const daysSlider = document.getElementById("daysSlider");
-  const carName = document.getElementById("carName");
-  const carClass = document.getElementById("carClass");
-  const days = document.getElementById("days");
-  const dailyPrice = document.getElementById("dailyPrice");
-  const range = document.getElementById("range");
-  const subtotal = document.getElementById("subtotal");
-  const vat = document.getElementById("vat");
-  const total = document.getElementById("total");
-  const tarifler = document.getElementById("tarifler");
-  const summary = document.getElementById("summary");
+    const carSelect = document.getElementById("carSelect");
+    const daysInput = document.getElementById("daysInput");
+    const daysSlider = document.getElementById("daysSlider");
+    const carName = document.getElementById("carName");
+    const carClass = document.getElementById("carClass");
+    const days = document.getElementById("days");
+    const dailyPrice = document.getElementById("dailyPrice");
+    const range = document.getElementById("range");
+    const subtotal = document.getElementById("subtotal");
+    const vat = document.getElementById("vat");
+    const total = document.getElementById("total");
+    const tarifler = document.getElementById("tarifler");
+    const summary = document.getElementById("summary");
 
-  let currentSliderValue = parseInt(daysSlider.value);
-  let targetSliderValue = currentSliderValue;
+    let currentSliderValue = parseInt(daysSlider.value);
+    let targetSliderValue = currentSliderValue;
 
-  function animateSlider() {
-    if (Math.abs(targetSliderValue - currentSliderValue) > 0.1) {
-      currentSliderValue += (targetSliderValue - currentSliderValue) * 0.15;
-      daysSlider.value = currentSliderValue;
-      requestAnimationFrame(animateSlider);
-    } else {
-      currentSliderValue = targetSliderValue;
-      daysSlider.value = targetSliderValue;
+    function animateSlider() {
+      if (Math.abs(targetSliderValue - currentSliderValue) > 0.1) {
+        currentSliderValue += (targetSliderValue - currentSliderValue) * 0.15;
+        daysSlider.value = currentSliderValue;
+        requestAnimationFrame(animateSlider);
+      } else {
+        currentSliderValue = targetSliderValue;
+        daysSlider.value = targetSliderValue;
+      }
     }
-  }
 
-  function renderTariffs(car) {
-    tarifler.innerHTML = "";
-    car.tariffs.forEach((t, i) => {
-      const div = document.createElement("div");
-      div.className = "tarif";
-      setTimeout(() => div.classList.add("show"), i * 100);
-      div.innerHTML = `${t.min}–${t.max >= 999 ? "+" : t.max} gün <strong>AZN ${t.price.toFixed(2)}</strong>`;
-      tarifler.appendChild(div);
+    function renderTariffs(car) {
+      tarifler.innerHTML = "";
+      car.tariffs.forEach((t, i) => {
+        const div = document.createElement("div");
+        div.className = "tarif";
+        setTimeout(() => div.classList.add("show"), i * 100);
+        div.innerHTML = `${t.min}–${t.max >= 999 ? "+" : t.max} gün <strong>AZN ${t.price.toFixed(2)}</strong>`;
+        tarifler.appendChild(div);
+      });
+    }
+
+    function updateCalculator() {
+      const car = cars[carSelect.value];
+      let d = parseInt(daysInput.value) || 1;
+      if (d < 1) d = 1;
+      if (d > 60) d = 60;
+      daysInput.value = d;
+
+      targetSliderValue = d;
+      animateSlider();
+
+      let tariff = car.tariffs.find(t => d >= t.min && d <= t.max);
+      if (!tariff) tariff = car.tariffs[car.tariffs.length-1];
+
+      const pricePerDay = tariff.price;
+      const sub = d * pricePerDay;
+      const vatVal = +(sub * 0.07).toFixed(2);
+      const totalVal = +(sub + vatVal).toFixed(2);
+
+      carName.textContent = car.name;
+      carClass.textContent = car.class;
+      days.textContent = d + " gün";
+      dailyPrice.textContent = "AZN " + pricePerDay.toFixed(2);
+      range.textContent = tariff.min + "–" + (tariff.max>=999?"+" : tariff.max) + " gün";
+      subtotal.textContent = "AZN " + sub.toFixed(2);
+      vat.textContent = "AZN " + vatVal.toFixed(2);
+      total.textContent = "AZN " + totalVal.toFixed(2);
+
+      Array.from(summary.querySelectorAll("p")).forEach((p, i) => {
+        p.classList.remove("show");
+        setTimeout(() => p.classList.add("show"), i * 120);
+      });
+
+      renderTariffs(car);
+
+      // Update URL dynamically
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.set("ref", carSelect.value);
+      newUrl.searchParams.set("days", d);
+      window.history.replaceState({}, '', newUrl);
+    }
+
+    // Events
+    carSelect.addEventListener("change", updateCalculator);
+    daysInput.addEventListener("input", updateCalculator);
+    daysSlider.addEventListener("input", () => {
+      daysInput.value = daysSlider.value;
+      targetSliderValue = parseInt(daysSlider.value);
+      currentSliderValue = targetSliderValue;
+      updateCalculator();
     });
-  }
 
-  function updateCalculator() {
-    const car = cars[carSelect.value];
-    let d = parseInt(daysInput.value) || 1;
-    if (d < 1) d = 1;
-    if (d > 60) d = 60;
-    daysInput.value = d;
+    // --- Auto select from URL ---
+    const urlParams = new URLSearchParams(window.location.search);
+    const refCar = urlParams.get("ref");
+    const refDays = urlParams.get("days");
 
-    targetSliderValue = d;
-    animateSlider();
+    if (refCar && cars[refCar]) carSelect.value = refCar;
+    if (refDays) {
+      let daysVal = parseInt(refDays);
+      if (isNaN(daysVal)) daysVal = 1;
+      if (daysVal < 1) daysVal = 1;
+      if (daysVal > 60) daysVal = 60;
+      daysInput.value = daysVal;
+      daysSlider.value = daysVal;
+    }
 
-    let tariff = car.tariffs.find(t => d >= t.min && d <= t.max);
-    if (!tariff) tariff = car.tariffs[car.tariffs.length - 1];
-
-    const pricePerDay = tariff.price;
-    const sub = d * pricePerDay;
-    const vatVal = +(sub * 0.07).toFixed(2);
-    const totalVal = +(sub + vatVal).toFixed(2);
-
-    carName.textContent = car.name;
-    carClass.textContent = car.class;
-    days.textContent = d + " gün";
-    dailyPrice.textContent = "AZN " + pricePerDay.toFixed(2);
-    range.textContent = tariff.min + "–" + (tariff.max >= 999 ? "+" : tariff.max) + " gün";
-    subtotal.textContent = "AZN " + sub.toFixed(2);
-    vat.textContent = "AZN " + vatVal.toFixed(2);
-    total.textContent = "AZN " + totalVal.toFixed(2);
-
-    Array.from(summary.querySelectorAll("p")).forEach((p, i) => {
-      p.classList.remove("show");
-      setTimeout(() => p.classList.add("show"), i * 120);
-    });
-
-    renderTariffs(car);
-  }
-
-  // Events
-  carSelect.addEventListener("change", updateCalculator);
-  daysInput.addEventListener("input", updateCalculator);
-  daysSlider.addEventListener("input", () => {
-    daysInput.value = daysSlider.value;
-    targetSliderValue = parseInt(daysSlider.value);
-    currentSliderValue = targetSliderValue;
     updateCalculator();
-  });
-
-
-
-updateCalculator();
   </script>
 </body>
 </html>
