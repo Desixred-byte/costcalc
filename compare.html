@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <title>Compare Cars - Carbon Rent</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f0f0f;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 { text-align: center; color: #931D4F; }
+    .car-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+    .car-list label {
+      background: #1b1b1b;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .car-list input { margin-right: 6px; }
+    .car-list label:hover {
+      background: #292929;
+    }
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    .compare-table th, .compare-table td {
+      border: 1px solid #333;
+      padding: 10px;
+      text-align: center;
+    }
+    .compare-table th {
+      background: #931D4F;
+    }
+    .car-img {
+      width: 120px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Avtomobil Müqayisəsi</h1>
+
+<div class="car-list" id="carList"></div>
+
+<table class="compare-table" id="compareTable">
+  <thead></thead>
+  <tbody></tbody>
+</table>
+
+<script>
+// === Sample cars object (reuse your own from calculator) ===
+const cars = {
+  sclass: {
+    name: "Mercedes S-Class",
+    year: 2022,
+    seats: 5,
+    luggage: "3 böyük + 2 kiçik",
+    image: "sclass.png",
+    tariffs: [
+      {min:1, max:3, price:250},
+      {min:4, max:7, price:220},
+      {min:8, max:30, price:200}
+    ]
+  },
+  eclass: {
+    name: "Mercedes E-Class",
+    year: 2021,
+    seats: 5,
+    luggage: "2 böyük + 2 kiçik",
+    image: "eclass.png",
+    tariffs: [
+      {min:1, max:3, price:180},
+      {min:4, max:7, price:160},
+      {min:8, max:30, price:140}
+    ]
+  }
+};
+
+// === Generate checkboxes ===
+const carList = document.getElementById("carList");
+for (const key in cars) {
+  let lbl = document.createElement("label");
+  lbl.innerHTML = `<input type="checkbox" value="${key}"> ${cars[key].name}`;
+  carList.appendChild(lbl);
+}
+
+// === Compare Table Update ===
+function updateComparison() {
+  const selected = [...document.querySelectorAll(".car-list input:checked")].map(c => c.value);
+  const tableHead = document.querySelector("#compareTable thead");
+  const tableBody = document.querySelector("#compareTable tbody");
+  tableHead.innerHTML = "";
+  tableBody.innerHTML = "";
+
+  if (selected.length === 0) return;
+
+  // Header
+  let headerRow = "<tr><th>Xüsusiyyət</th>";
+  selected.forEach(k => headerRow += `<th>${cars[k].name}</th>`);
+  headerRow += "</tr>";
+  tableHead.innerHTML = headerRow;
+
+  // Rows
+  const rows = {
+    "Şəkil": k => `<img src="${cars[k].image}" class="car-img">`,
+    "Buraxılış ili": k => cars[k].year,
+    "Oturacaq": k => cars[k].seats,
+    "Bağaj": k => cars[k].luggage,
+    "Tariflər": k => cars[k].tariffs.map(t => `${t.min}–${t.max} gün: ${t.price} ₼`).join("<br>")
+  };
+
+  for (const r in rows) {
+    let tr = `<tr><td>${r}</td>`;
+    selected.forEach(k => tr += `<td>${rows[r](k)}</td>`);
+    tr += "</tr>";
+    tableBody.innerHTML += tr;
+  }
+}
+
+document.querySelectorAll(".car-list input").forEach(chk => {
+  chk.addEventListener("change", updateComparison);
+});
+</script>
+</body>
+</html>
