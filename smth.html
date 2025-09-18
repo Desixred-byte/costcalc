@@ -41,29 +41,31 @@ input[type=range]:active::-moz-range-thumb {transform:scale(1.4);}
 .tarif strong {display:block; margin-top:4px; color:#9c0a54; font-size:15px;}
 @keyframes shimmer {0%{left:-60%;}100%{left:120%;}}
 
-/* ================= Telegram-style Buttons ================= */
+/* ================= Fluid Modern Buttons ================= */
 .currency-toggle, .language-toggle {
   position: relative;
   display: flex;
   gap: 0;
   background: #f0f0f5;
-  border-radius: 40px;
+  border-radius: 50px;
   padding: 4px;
-  box-shadow: inset 0 3px 5px rgba(0,0,0,0.05);
+  box-shadow: inset 0 3px 6px rgba(0,0,0,0.08);
+  overflow: hidden;
 }
 
 .currency-toggle button, .language-toggle span {
   position: relative;
   flex: 1;
   text-align: center;
-  padding: 8px 16px;
-  border-radius: 40px;
+  padding: 10px 0;
+  border-radius: 50px;
   border: none;
   background: transparent;
   font-weight: 600;
   cursor: pointer;
   z-index: 2;
-  transition: color 0.3s ease;
+  transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 14px;
 }
 
 .currency-toggle button.active, .language-toggle span.active {
@@ -76,11 +78,25 @@ input[type=range]:active::-moz-range-thumb {transform:scale(1.4);}
   left: 0;
   width: calc(100% / 3);
   height: calc(100% - 8px);
-  background: linear-gradient(135deg, #9c0a54, #7b0045);
-  border-radius: 40px;
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  border-radius: 50px;
   z-index: 1;
-  transition: all 0.35s cubic-bezier(0.22,1,0.36,1);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+}
+
+.currency-toggle button:active, .language-toggle span:active {
+  transform: scale(0.95);
+  transition: transform 0.2s cubic-bezier(0.22,1,0.36,1);
+}
+
+.currency-toggle button:hover:not(.active), .language-toggle span:hover:not(.active) {
+  background: rgba(156,10,84,0.08);
+  border-radius: 50px;
+}
+
+.slider {
+  will-change: transform, left;
 }
   </style>
 </head>
@@ -92,11 +108,13 @@ input[type=range]:active::-moz-range-thumb {transform:scale(1.4);}
 <!-- Currency & Language -->
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
   <div class="currency-toggle">
+    <div class="slider"></div>
     <button class="currency-btn active" data-currency="AZN">AZN</button>
     <button class="currency-btn" data-currency="USD">USD</button>
     <button class="currency-btn" data-currency="EUR">EUR</button>
   </div>
   <div class="language-toggle">
+    <div class="slider"></div>
     <span data-lang="az" class="active">AZ</span>
     <span data-lang="en">EN</span>
     <span data-lang="ru">RU</span>
@@ -487,12 +505,9 @@ input[type=range]:active::-moz-range-thumb {transform:scale(1.4);}
     };
 
 
-const labels = {
-  az:{car:"Avtomobil:",class:"Sinif:",days:"Gün:",daily:"Gündəlik tarif:",range:"Aralıq:",subtotal:"Ara cəm:",vat:"ƏDV (7%):",total:"Cəmi:",carLabel:"Avtomobil seç",daysLabel:"Gün sayı",calcLabel:"Hesablama",orderLabel:"Sifarişi davam et",tariffLabel:"Tarif pillələri"},
-  en:{car:"Car:",class:"Class:",days:"Days:",daily:"Daily rate:",range:"Range:",subtotal:"Subtotal:",vat:"VAT (7%):",total:"Total:",carLabel:"Select Car",daysLabel:"Number of days",calcLabel:"Calculator",orderLabel:"Continue order",tariffLabel:"Tariff tiers"},
-  ru:{car:"Авто:",class:"Класс:",days:"Дни:",daily:"Суточная ставка:",range:"Диапазон:",subtotal:"Промежуточно:",vat:"НДС (7%):",total:"Итого:",carLabel:"Выберите авто",daysLabel:"Количество дней",calcLabel:"Калькулятор",orderLabel:"Продолжить",tariffLabel:"Тарифы"}
-};
-
+const labels = { az:{car:"Avtomobil:",class:"Sinif:",days:"Gün:",daily:"Gündəlik tarif:",range:"Aralıq:",subtotal:"Ara cəm:",vat:"ƏDV (7%):",total:"Cəmi:",carLabel:"Avtomobil seç",daysLabel:"Gün sayı",calcLabel:"Hesablama",orderLabel:"Sifarişi davam et",tariffLabel:"Tarif pillələri"},
+en:{car:"Car:",class:"Class:",days:"Days:",daily:"Daily rate:",range:"Range:",subtotal:"Subtotal:",vat:"VAT (7%):",total:"Total:",carLabel:"Select Car",daysLabel:"Number of days",calcLabel:"Calculator",orderLabel:"Continue order",tariffLabel:"Tariff tiers"},
+ru:{car:"Авто:",class:"Класс:",days:"Дни:",daily:"Суточная ставка:",range:"Диапазон:",subtotal:"Промежуточно:",vat:"НДС (7%):",total:"Итого:",carLabel:"Выберите авто",daysLabel:"Количество дней",calcLabel:"Калькулятор",orderLabel:"Продолжить",tariffLabel:"Тарифы"}};
 const dayWord = {az:'gün',en:'days',ru:'дн.'};
 const rates = {AZN:1, USD:0.59, EUR:0.52};
 
@@ -509,115 +524,77 @@ const carClass = document.getElementById("carClass");
 const days = document.getElementById("days");
 const dailyPrice = document.getElementById("dailyPrice");
 const rangeElem = document.getElementById("range");
-const subtotal = document.getElementById("subtotal");
-const vat = document.getElementById("vat");
-const total = document.getElementById("total");
-const tarifler = document.getElementById("tarifler");
+const subtotalElem = document.getElementById("subtotal");
+const vatElem = document.getElementById("vat");
+const totalElem = document.getElementById("total");
+const summaryParas = document.querySelectorAll(".summary p");
 
-// Populate car select
-Object.keys(cars).forEach(key=>{
+/* Populate car select */
+for(let key in cars){
   const option = document.createElement("option");
   option.value = key;
-  option.textContent = cars[key].name + " (" + cars[key].class + ")";
+  option.textContent = cars[key].name;
   carSelect.appendChild(option);
-});
-
-// Format currency
-function formatCurrency(val){
-  const converted = val * rates[currentCurrency];
-  if(currentCurrency==='AZN') return `AZN ${converted.toFixed(2)}`;
-  if(currentCurrency==='USD') return `USD ${converted.toFixed(2)}`;
-  if(currentCurrency==='EUR') return `€ ${converted.toFixed(2)}`;
-  return converted.toFixed(2);
 }
 
-// Animate slider
-function animateSliderSpring(){
-  currentSliderValue += (targetSliderValue - currentSliderValue) * 0.2;
-  daysSlider.value = Math.round(currentSliderValue);
-  if(Math.abs(targetSliderValue-currentSliderValue)>0.1) requestAnimationFrame(animateSliderSpring);
-}
-
-// Render tariffs
-function renderTariffs(car){
-  tarifler.innerHTML="";
-  car.tariffs.forEach(t=>{
-    const div = document.createElement("div");
-    div.className="tarif";
-    div.innerHTML=`${t.min}-${t.max>=999?"+":t.max} ${dayWord[currentLang]}<strong>${formatCurrency(t.price)}</strong>`;
-    tarifler.appendChild(div);
-    setTimeout(()=>div.classList.add("show"),50);
-  });
-}
-
-// Update calculator
-function updateCalculator(){
+/* Calculate & render */
+function updateSummary(){
   const car = cars[carSelect.value];
-  let d = parseInt(daysInput.value)||1;
-  if(d<1)d=1;if(d>90)d=90;
-  targetSliderValue=d;
-  animateSliderSpring();
-
-  let tariff = car.tariffs.find(t=>d>=t.min && d<=t.max);
-  if(!tariff) tariff = car.tariffs[car.tariffs.length-1];
-
-  const pricePerDay = tariff.price;
-  const sub = d*pricePerDay;
-  const vatVal = +(sub*0.07).toFixed(2);
-  const totalVal = +(sub + vatVal).toFixed(2);
-
-  carName.textContent=car.name;
-  carClass.textContent=car.class;
-  days.textContent=d + " " + dayWord[currentLang];
-  dailyPrice.textContent=formatCurrency(pricePerDay);
-  rangeElem.textContent=tariff.min + (tariff.max>=999?'+':'-'+tariff.max) + " " + dayWord[currentLang];
-  subtotal.textContent=formatCurrency(sub);
-  vat.textContent=formatCurrency(vatVal);
-  total.textContent=formatCurrency(totalVal);
-
-  // Show summary
-  document.querySelectorAll("#summary p").forEach(p=>p.classList.add("show"));
-
-  // Update labels
-  document.getElementById("carLabel").textContent=labels[currentLang].carLabel;
-  document.getElementById("carLabel2").textContent=labels[currentLang].car;
-  document.getElementById("classLabel").textContent=labels[currentLang].class;
-  document.getElementById("daysLabel").textContent=labels[currentLang].daysLabel;
-  document.getElementById("daysLabel2").textContent=labels[currentLang].days;
-  document.getElementById("dailyLabel").textContent=labels[currentLang].daily;
-  document.getElementById("rangeLabel").textContent=labels[currentLang].range;
-  document.getElementById("subLabel").textContent=labels[currentLang].subtotal;
-  document.getElementById("vatLabel").textContent=labels[currentLang].vat;
-  document.getElementById("totalLabel").textContent=labels[currentLang].total;
-  document.getElementById("calcLabel").textContent=labels[currentLang].calcLabel;
-  document.getElementById("orderLabel").textContent=labels[currentLang].orderLabel;
-  document.getElementById("tariffLabel").textContent=labels[currentLang].tariffLabel;
-
-  renderTariffs(car);
+  const daysVal = parseInt(daysInput.value);
+  const daily = (car.transfer ? car.daily + 10 : car.daily) * rates[currentCurrency];
+  const subtotal = daily*daysVal;
+  const vat = subtotal*0.07;
+  const total = subtotal+vat;
+  
+  carName.textContent = car.name;
+  carClass.textContent = car.class;
+  days.textContent = daysVal+' '+dayWord[currentLang];
+  dailyPrice.textContent = daily.toFixed(2)+' '+currentCurrency;
+  subtotalElem.textContent = subtotal.toFixed(2)+' '+currentCurrency;
+  vatElem.textContent = vat.toFixed(2)+' '+currentCurrency;
+  totalElem.textContent = total.toFixed(2)+' '+currentCurrency;
+  
+  summaryParas.forEach(p=>p.classList.add("show"));
 }
 
-// Event listeners
-carSelect.addEventListener("change",updateCalculator);
-daysInput.addEventListener("input",()=>{targetSliderValue=parseInt(daysInput.value)||1; updateCalculator();});
-daysSlider.addEventListener("input",()=>{daysInput.value=daysSlider.value; targetSliderValue=parseInt(daysSlider.value); updateCalculator();});
+/* Slider input sync */
+daysInput.addEventListener("input",()=>{daysSlider.value=daysInput.value;updateSummary();});
+daysSlider.addEventListener("input",()=>{daysInput.value=daysSlider.value;updateSummary();});
+carSelect.addEventListener("change",updateSummary);
 
-// Currency toggle
-document.querySelectorAll(".currency-btn").forEach(btn=>{
-  btn.addEventListener("click",()=>{currentCurrency=btn.dataset.currency; document.querySelectorAll(".currency-btn").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); updateCalculator();});
-});
-
-// Language toggle
-document.querySelectorAll(".language-toggle span").forEach(span=>{
-  span.addEventListener("click",()=>{
-    currentLang=span.dataset.lang;
-    document.querySelectorAll(".language-toggle span").forEach(s=>s.classList.remove("active"));
-    span.classList.add("active");
-    updateCalculator();
+/* Currency buttons */
+const currencyBtns = document.querySelectorAll(".currency-btn");
+const currencySlider = document.querySelector(".currency-toggle .slider");
+currencyBtns.forEach((btn,i)=>{
+  btn.addEventListener("click",()=>{
+    currencyBtns.forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    currentCurrency=btn.dataset.currency;
+    currencySlider.style.transform = `translateX(${i*100}%)`;
+    updateSummary();
   });
 });
 
-// Initial render
-updateCalculator();
+/* Language buttons */
+const langBtns = document.querySelectorAll(".language-toggle span");
+const langSlider = document.querySelector(".language-toggle .slider");
+langBtns.forEach((btn,i)=>{
+  btn.addEventListener("click",()=>{
+    langBtns.forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    currentLang=btn.dataset.lang;
+    langSlider.style.transform = `translateX(${i*100}%)`;
+    /* update labels dynamically */
+    for(let key in labels[currentLang]){
+      const elem = document.getElementById(key);
+      if(elem) elem.textContent = labels[currentLang][key];
+    }
+    updateSummary();
+  });
+});
+
+/* Initial summary */
+updateSummary();
   </script>
 </body>
 </html>
