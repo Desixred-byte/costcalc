@@ -8,253 +8,213 @@
   <!-- Phosphor Icons -->
   <script src="https://unpkg.com/phosphor-icons"></script>
   <style>
-/* Global reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html, body {
-  width: 100%;
-  overflow-x: hidden; /* Prevent side scrolling on mobile */
+:root {
+  --accent: #931D4F;
+  --bg: #f2f2f7;
+  --card-bg: #ffffff;
+  --shadow: 0 10px 30px rgba(0,0,0,0.06), 0 4px 10px rgba(0,0,0,0.04);
 }
 
 body {
-  font-family: 'Montserrat', sans-serif;
-  background: #ffffff;
-  color: #111;
+  margin: 0;
+  font-family: "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: #333;
+  line-height: 1.5;
 }
 
-/* Container */
 .container {
-  max-width: 500px;
+  max-width: 95%;
   margin: auto;
   padding: 20px;
+  text-align: center;
 }
 
-/* 3D Title */
 h1 {
-  text-align: center;
-  font-weight: 800;
   font-size: 28px;
-  margin-bottom: 6px;
-  background: linear-gradient(135deg, #9c0a54, #7b0045);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 2px 2px 8px rgba(156, 10, 84, 0.4);
-  animation: fadeDown 0.8s ease forwards;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 8px rgba(156, 10, 84, 0.2);
 }
+
 .subtitle {
-  text-align: center;
-  font-size: 15px;
-  font-weight: 500;
-  color: #444;
-  margin-bottom: 25px;
-  opacity: 0.9;
+  font-size: 14px;
+  margin-bottom: 20px;
+  color: #555;
 }
 
 .card {
-  background: #fff;
-  border-radius: 24px;
-  box-shadow: 0 12px 28px rgba(0,0,0,0.08), 
-              0 4px 8px rgba(0,0,0,0.04);
-  padding: 24px;
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 20px;
   margin: 20px 0;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  animation: fadeUp 0.7s ease forwards;
-}
-.card:hover {
-  transform: translateY(-6px) rotateX(2deg) rotateY(2deg);
-  box-shadow: 0 16px 34px rgba(0,0,0,0.12), 
-              0 6px 12px rgba(0,0,0,0.05);
+  box-shadow: var(--shadow);
+  text-align: left;
 }
 
 h3 {
   margin-top: 0;
-  margin-bottom: 14px;
-  font-weight: 600;
-  font-size: 19px;
-  color: #222;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  font-size: 18px;
+  color: var(--accent);
 }
 
-label {
-  font-weight: 500;
-  margin-top: 14px;
-  display: block;
-  color: #444;
-}
-
-/* Inputs & Select */
 select, input[type=number], input[type=range] {
   width: 100%;
   padding: 12px;
-  border-radius: 14px;
+  margin: 10px 0 20px 0;
   border: 1px solid #ddd;
+  border-radius: 12px;
   font-size: 15px;
-  margin-top: 6px;
-  box-sizing: border-box;
   background: #fafafa;
-  transition: border-color 0.2s ease, transform 0.2s ease;
-  appearance: none;
+  transition: 0.2s;
 }
-select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%239c0a54' viewBox='0 0 256 256'%3E%3Cpath d='M128 176a8 8 0 0 1-5.66-2.34l-80-80a8 8 0 0 1 11.32-11.32L128 157.37l74.34-74.34a8 8 0 0 1 11.32 11.32l-80 80A8 8 0 0 1 128 176z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
-  background-size: 14px;
-  padding-right: 36px;
-}
+
 select:focus, input:focus {
   outline: none;
-  border-color: #9c0a54;
-  transform: scale(1.01);
+  border-color: var(--accent);
+  background: #fff;
 }
 
-/* Fix Safari iPhone blue text */
-a, select, option {
-  color: inherit !important;
-  text-decoration: none !important;
-  -webkit-text-fill-color: currentColor !important;
-}
-
-input[type=range] {
-  padding: 0;
-  height: 6px;
-  background: #e2e2e2;
-  border-radius: 5px;
-  margin-top: 12px;
-}
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
-  background: #9c0a54;
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  transition: all 0.3s ease;
-}
-input[type=range]::-webkit-slider-thumb:hover {
-  background: #7b0045;
-  transform: scale(1.1);
-}
-
-/* Summary Text */
-.summary p {
-  margin: 6px 0;
-  font-size: 15px;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: all 0.4s ease;
-}
-.summary p.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Total price styling */
-.total {
-  font-size: 26px;
-  font-weight: 800;
-  background: linear-gradient(135deg, #9c0a54, #7b0045);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-top: 20px;
-  position: relative;
-  animation: glowText 3s infinite ease-in-out;
-}
-
-/* Elegant glow effect */
-@keyframes glowText {
-  0%, 100% { text-shadow: 0 0 4px rgba(156, 10, 84, 0.3); }
-  50% { text-shadow: 0 0 12px rgba(156, 10, 84, 0.6); }
-}
-
-/* Shimmer sweep */
-.total::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -60%;
-  width: 45%;
-  height: 100%;
-  background: linear-gradient(120deg, rgba(255,255,255,0.45) 0%, transparent 80%);
-  transform: skewX(-25deg);
-  animation: shimmer 4s infinite;
-}
-
-@keyframes shimmer {
-  0% { left: -60%; }
-  100% { left: 120%; }
-}
-
-/* Button */
 .btn {
-  display: block;
   width: 100%;
-  text-align: center;
   padding: 16px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, #9c0a54, #7b0045);
+  background: var(--accent);
   color: #fff;
-  font-size: 16px;
-  font-weight: 600;
   border: none;
+  border-radius: 16px;
+  font-size: 16px;
   cursor: pointer;
-  margin-top: 18px;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.18);
   transition: all 0.25s ease;
 }
+
 .btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-}
-.btn:active {
-  transform: scale(0.97);
+  background: #75163d;
+  transform: translateY(-2px);
 }
 
-/* Tariffs */
 .tarifler {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
   margin-top: 15px;
 }
+
 .tarif {
-  background: #fafafa;
+  background: #fdfdfd;
+  border: 1px solid #eee;
   border-radius: 14px;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
   padding: 14px;
   text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
   font-size: 14px;
-  transition: all 0.3s ease;
-  opacity: 0;
-  transform: scale(0.95) translateY(10px);
 }
-.tarif.show {
-  opacity: 1;
-  transform: scale(1) translateY(0);
+
+.tarif:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
 }
+
 .tarif strong {
   display: block;
-  margin-top: 4px;
-  color: #9c0a54;
+  font-size: 15px;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.summary {
+  margin-top: 20px;
   font-size: 15px;
 }
 
-/* Animations */
-@keyframes fadeUp {
-  from {opacity:0; transform: translateY(20px);}
-  to {opacity:1; transform: translateY(0);}
+.summary p {
+  margin: 6px 0;
 }
-@keyframes fadeDown {
-  from {opacity:0; transform: translateY(-20px);}
-  to {opacity:1; transform: translateY(0);}
+
+.total {
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 15px;
+  color: var(--accent);
 }
+
+/* ------------------- PC/Desktop Responsive Enhancements ------------------- */
+@media (min-width: 769px) {
+  body {
+    background: linear-gradient(135deg, #fafafa, #f2f2f2);
+    padding: 40px 0;
+  }
+
+  .container {
+    max-width: 1100px;
+    padding: 40px;
+  }
+
+  h1 {
+    font-size: 42px;
+    text-shadow: 3px 3px 12px rgba(156, 10, 84, 0.3);
+  }
+
+  .subtitle {
+    font-size: 18px;
+    margin-bottom: 40px;
+  }
+
+  .card {
+    border-radius: 28px;
+    padding: 36px;
+    margin: 30px 0;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.08), 
+                0 6px 14px rgba(0,0,0,0.05);
+  }
+
+  h3 {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+
+  select, input[type=number], input[type=range] {
+    font-size: 17px;
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .btn {
+    padding: 20px;
+    font-size: 18px;
+    border-radius: 20px;
+  }
+
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+
+  .tarifler {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 20px;
+  }
+
+  .tarif {
+    padding: 20px;
+    font-size: 16px;
+  }
+
+  .tarif strong {
+    font-size: 18px;
+  }
+
+  .summary p {
+    font-size: 17px;
+  }
+
+  .total {
+    font-size: 32px;
+  }
+}
+
 
 
   </style>
