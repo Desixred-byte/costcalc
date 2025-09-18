@@ -48,11 +48,15 @@ input[type=range]:active::-moz-range-thumb {transform:scale(1.4);}
 .currency-toggle .option.left {left:0;}
 .currency-toggle .option.right {right:0;}
 
+/* ================ Language Toggle ================ */
+.language-toggle {display:flex; justify-content:center; gap:10px; margin-bottom:20px;}
+.language-toggle span {padding:6px 12px; border-radius:12px; cursor:pointer; font-weight:600; transition:all 0.25s ease;}
+.language-toggle span.active {background:#9c0a54; color:#fff;}
+
 @keyframes fadeUp {from{opacity:0; transform:translateY(20px);}to{opacity:1; transform:translateY(0);}}
 @keyframes fadeDown {from{opacity:0; transform:translateY(-20px);}to{opacity:1; transform:translateY(0);}}
 @keyframes glowText {0%,100%{text-shadow:0 0 4px rgba(156,10,84,0.3);}50%{text-shadow:0 0 12px rgba(156,10,84,0.6);}}
 @keyframes shimmer {0%{left:-60%;}100%{left:120%;}}
-
   </style>
 </head>
 <body>
