@@ -371,7 +371,24 @@
     carSelect.value = refCar;
   }
 
-  updateCalculator();
+const urlParams = new URLSearchParams(window.location.search);
+const refCar = urlParams.get("ref");
+const refDays = urlParams.get("days");
+
+if (refCar && cars[refCar]) {
+  carSelect.value = refCar;
+}
+
+if (refDays) {
+  let daysVal = parseInt(refDays);
+  if (isNaN(daysVal)) daysVal = 1;
+  if (daysVal < 1) daysVal = 1;
+  if (daysVal > 60) daysVal = 60;
+  daysInput.value = daysVal;
+  daysSlider.value = daysVal;
+}
+
+updateCalculator();
   </script>
 </body>
 </html>
