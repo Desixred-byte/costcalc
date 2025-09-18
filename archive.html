@@ -667,7 +667,6 @@ input[type=range]:active::-moz-range-thumb {
     };
 
 
-
 const carSelect = document.getElementById("carSelect");
 const daysInput = document.getElementById("daysInput");
 const daysSlider = document.getElementById("daysSlider");
@@ -685,6 +684,7 @@ const summary = document.getElementById("summary");
 let currentSliderValue = parseInt(daysSlider.value);
 let targetSliderValue = currentSliderValue;
 
+// Slider spring animation
 function animateSliderSpring() {
   currentSliderValue += (targetSliderValue - currentSliderValue) * 0.2;
   daysSlider.value = currentSliderValue.toFixed(0);
@@ -696,6 +696,7 @@ function animateSliderSpring() {
   }
 }
 
+// Animate number counting
 function animateNumber(element, start, end, duration = 500) {
   const range = end - start;
   let startTime = null;
@@ -711,6 +712,7 @@ function animateNumber(element, start, end, duration = 500) {
   requestAnimationFrame(step);
 }
 
+// Render tariffs
 function renderTariffs(car) {
   tarifler.innerHTML = "";
   car.tariffs.forEach((t, i) => {
@@ -722,9 +724,10 @@ function renderTariffs(car) {
   });
 }
 
+// Update calculator
 function updateCalculator() {
   const car = cars[carSelect.value];
-  let d = parseInt(daysInput.value) || 1;
+  let d = parseInt(daysInput.value) || 0;
   if(d < 1) d = 1;
   if(d > 90) d = 90;
 
@@ -773,15 +776,21 @@ if(params.has("days")) {
   if(d >=1 && d <= 90) daysInput.value = daysSlider.value = d;
 }
 
+// Input & slider events
 carSelect.addEventListener("change", updateCalculator);
+
 daysInput.addEventListener("input", () => { 
-  let val = parseInt(daysInput.value) || 1;
+  let val = daysInput.value;
+  if(val === "") { targetSliderValue = 0; return; } // allow clearing
+  val = parseInt(val);
   if(val > 90) val = 90;
+  if(val < 1) val = 1;
   daysInput.value = val;
   targetSliderValue = val;
   animateSliderSpring();
   updateCalculator();
 });
+
 daysSlider.addEventListener("input", () => {
   daysInput.value = daysSlider.value;
   targetSliderValue = parseInt(daysSlider.value);
@@ -789,7 +798,21 @@ daysSlider.addEventListener("input", () => {
   updateCalculator();
 });
 
+// iOS keyboard fix
+function fixIOSKeyboard() {
+  if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    document.body.addEventListener('focusin', () => {
+      setTimeout(() => { window.scrollTo(0,0); }, 300);
+    });
+    document.body.addEventListener('focusout', () => {
+      setTimeout(() => { window.scrollTo(0,0); }, 300);
+    });
+  }
+}
+fixIOSKeyboard();
+
 updateCalculator();
+
 
   </script>
 </body>
