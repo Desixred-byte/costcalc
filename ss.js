@@ -1,321 +1,109 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carbon Rent Cost Calculator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Phosphor Icons -->
-  <script src="https://unpkg.com/phosphor-icons"></script>
-  <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carbon Rent Cost Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/phosphor-icons"></script>
+<style>
 /* ================= Global Reset ================= */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html, body {
-  width: 100%;
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-  font-family: 'Montserrat', sans-serif;
-  background: #ffffff;
-  color: #111;
-  -webkit-text-size-adjust: 100%; 
-  touch-action: manipulation;
-}
-
-a, select, option {
-  color: inherit !important;
-  text-decoration: none !important;
-  -webkit-text-fill-color: currentColor !important;
-}
-
-input, select, textarea {
-  font-size: 16px; 
-  -webkit-text-size-adjust: 100%;
-}
+* {margin:0;padding:0;box-sizing:border-box;}
+html,body {width:100%;height:100%;overflow-x:hidden;font-family:'Montserrat',sans-serif;background:#fff;color:#111;}
+a,select,option {color:inherit !important;text-decoration:none !important;-webkit-text-fill-color:currentColor !important;}
+input, select, textarea {font-size:16px;-webkit-text-size-adjust:100%;}
 
 /* ================= Container ================= */
-.container {
-  max-width: 500px;
-  margin: auto;
-  padding: 20px;
-  overflow: hidden;
-}
+.container {max-width:500px;margin:auto;padding:20px;overflow:hidden;}
 
 /* ================= Title ================= */
-h1 {
-  text-align: center;
-  font-weight: 800;
-  font-size: 28px;
-  margin-bottom: 6px;
-  background: linear-gradient(135deg, #9c0a54, #7b0045);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 2px 2px 8px rgba(156, 10, 84, 0.4);
-  animation: fadeDown 0.8s ease forwards;
-}
-.subtitle {
-  text-align: center;
-  font-size: 15px;
-  font-weight: 500;
-  color: #444;
-  margin-bottom: 25px;
-  opacity: 0.9;
-}
+h1 {text-align:center;font-weight:800;font-size:28px;margin-bottom:6px;background:linear-gradient(135deg,#9c0a54,#7b0045);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:2px 2px 8px rgba(156,10,84,0.4);animation:fadeDown 0.8s ease forwards;}
+.subtitle {text-align:center;font-size:15px;font-weight:500;color:#444;margin-bottom:25px;opacity:0.9;}
 
 /* ================= Card ================= */
-.card {
-  background: #fff;
-  border-radius: 24px;
-  box-shadow: 0 12px 28px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
-  padding: 24px;
-  margin: 20px 0;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  animation: fadeUp 0.7s ease forwards;
-  overflow: hidden;
-}
-.card:hover {
-  transform: translateY(-6px) rotateX(2deg) rotateY(2deg);
-  box-shadow: 0 16px 34px rgba(0,0,0,0.12), 0 6px 12px rgba(0,0,0,0.05);
-}
+.card {background:#fff;border-radius:24px;box-shadow:0 12px 28px rgba(0,0,0,0.08),0 4px 8px rgba(0,0,0,0.04);padding:24px;margin:20px 0;transition:transform 0.35s cubic-bezier(0.25,1,0.5,1),box-shadow 0.35s ease;animation:fadeUp 0.7s ease forwards;overflow:hidden;}
+.card:hover {transform:translateY(-8px);box-shadow:0 20px 40px rgba(0,0,0,0.1);}
 
 /* ================= Headings ================= */
-h3 {
-  margin-top: 0;
-  margin-bottom: 14px;
-  font-weight: 600;
-  font-size: 19px;
-  color: #222;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-label {
-  font-weight: 500;
-  margin-top: 14px;
-  display: block;
-  color: #444;
-}
+h3 {margin-top:0;margin-bottom:14px;font-weight:600;font-size:19px;color:#222;display:flex;align-items:center;gap:8px;}
+label {font-weight:500;margin-top:14px;display:block;color:#444;}
 
 /* ================= Inputs & Select ================= */
-select, input[type=number], input[type=range] {
-  width: 100%;
-  padding: 12px;
-  border-radius: 14px;
-  border: 1px solid #ddd;
-  font-size: 16px;
-  margin-top: 6px;
-  box-sizing: border-box;
-  background: #fafafa;
-  transition: border-color 0.2s ease, transform 0.2s ease;
-  appearance: none;
-}
-
-select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%239c0a54' viewBox='0 0 256 256'%3E%3Cpath d='M128 176a8 8 0 0 1-5.66-2.34l-80-80a8 8 0 0 1 11.32-11.32L128 157.37l74.34-74.34a8 8 0 0 1 11.32 11.32l-80 80A8 8 0 0 1 128 176z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
-  background-size: 14px;
-  padding-right: 36px;
-}
-
-select:focus, input:focus {
-  outline: none;
-  border-color: #9c0a54;
-  transform: none !important;
-}
-
-/* ================= Range Slider ================= */
-input[type=range] {
-  padding: 0;
-  height: 6px;
-  background: #e2e2e2;
-  border-radius: 5px;
-  margin-top: 12px;
-}
-
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 24px;
-  height: 24px;
-  background: #9c0a54;
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-input[type=range]:active::-webkit-slider-thumb {
-  transform: scale(1.4);
-}
-
-input[type=range]::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
-  background: #9c0a54;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-input[type=range]:active::-moz-range-thumb {
-  transform: scale(1.4);
-}
+select,input[type=number],input[type=range] {width:100%;padding:12px;border-radius:14px;border:1px solid #ddd;font-size:16px;margin-top:6px;box-sizing:border-box;background:#fafafa;transition:border-color 0.2s ease,transform 0.2s ease;}
+select {background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%239c0a54' viewBox='0 0 256 256'%3E%3Cpath d='M128 176a8 8 0 0 1-5.66-2.34l-80-80a8 8 0 0 1 11.32-11.32L128 157.37l74.34-74.34a8 8 0 0 1 11.32 11.32l-80 80A8 8 0 0 1 128 176z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:14px;padding-right:36px;}
+select:focus,input:focus {outline:none;border-color:#9c0a54;box-shadow:0 0 10px rgba(156,10,84,0.2);}
+input[type=range] {padding:0;height:6px;background:#e2e2e2;border-radius:5px;margin-top:12px;}
+input[type=range]::-webkit-slider-thumb {-webkit-appearance:none;width:24px;height:24px;background:#9c0a54;border-radius:50%;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,0.2);transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);}
+input[type=range]:active::-webkit-slider-thumb {transform:scale(1.6);box-shadow:0 0 8px rgba(156,10,84,0.4);}
+input[type=range]::-moz-range-thumb {width:24px;height:24px;background:#9c0a54;border-radius:50%;cursor:pointer;transition:all 0.2s cubic-bezier(0.34,1.56,0.64,1);}
+input[type=range]:active::-moz-range-thumb {transform:scale(1.6);}
 
 /* ================= Summary ================= */
-.summary p {
-  margin: 6px 0;
-  font-size: 15px;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: all 0.4s ease;
-}
-.summary p.show {
-  opacity: 1;
-  transform: translateY(0);
-}
+.summary p {margin:6px 0;font-size:15px;opacity:0;transform:translateX(-20px);transition:all 0.35s cubic-bezier(0.25,1,0.5,1);}
+.summary p.show {opacity:1;transform:translateX(0);}
 
 /* ================= Total price ================= */
-.total {
-  font-size: 26px;
-  font-weight: 800;
-  background: linear-gradient(135deg, #9c0a54, #7b0045);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-top: 20px;
-  position: relative;
-  animation: glowText 3s infinite ease-in-out;
-}
-.total::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -60%;
-  width: 45%;
-  height: 100%;
-  background: linear-gradient(120deg, rgba(255,255,255,0.45) 0%, transparent 80%);
-  transform: skewX(-25deg);
-  animation: shimmer 4s infinite;
-}
+.total {font-size:26px;font-weight:800;background:linear-gradient(135deg,#9c0a54,#7b0045);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-top:20px;position:relative;animation:glowText 2.5s infinite ease-in-out alternate;}
+.total::after {content:"";position:absolute;top:0;left:-60%;width:45%;height:100%;background:linear-gradient(120deg,rgba(255,255,255,0.45) 0%,transparent 80%);transform:skewX(-25deg);animation:shimmer 4s infinite;}
 
 /* ================= Button ================= */
-.btn {
-  display: block;
-  width: 100%;
-  text-align: center;
-  padding: 16px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, #9c0a54, #7b0045);
-  color: #fff;
-  font-size: 16px;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  margin-top: 18px;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.18);
-  transition: all 0.25s ease;
-}
-.btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-}
-.btn:active {
-  transform: scale(0.97);
-}
+.btn {display:block;width:100%;text-align:center;padding:16px;border-radius:18px;background:linear-gradient(135deg,#9c0a54,#7b0045);color:#fff;font-size:16px;font-weight:600;border:none;cursor:pointer;margin-top:18px;box-shadow:0 6px 14px rgba(0,0,0,0.18);position:relative;overflow:hidden;transition:all 0.25s ease;}
+.btn:hover {transform:translateY(-3px);box-shadow:0 10px 20px rgba(0,0,0,0.2);}
+.btn:active {transform:scale(0.97);}
+.btn::after {content:"";position:absolute;left:50%;top:50%;width:0;height:0;background:rgba(255,255,255,0.25);border-radius:50%;transform:translate(-50%,-50%);transition:width 0.4s ease,height 0.4s ease;}
+.btn:active::after {width:300%;height:300%;transition:0s;}
 
 /* ================= Tariffs ================= */
-.tarifler {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 14px;
-  margin-top: 15px;
-}
-.tarif {
-  background: #fafafa;
-  border-radius: 14px;
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
-  padding: 14px;
-  text-align: center;
-  font-size: 14px;
-  transition: all 0.3s ease;
-  opacity: 0;
-  transform: scale(0.95) translateY(10px);
-}
-.tarif.show {
-  opacity: 1;
-  transform: scale(1) translateY(0);
-}
-.tarif strong {
-  display: block;
-  margin-top: 4px;
-  color: #9c0a54;
-  font-size: 15px;
-}
+.tarifler {display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:14px;margin-top:15px;}
+.tarif {background:#fafafa;border-radius:14px;box-shadow:inset 0 1px 3px rgba(0,0,0,0.05);padding:14px;text-align:center;font-size:14px;opacity:0;transform:translateY(12px);transition:all 0.35s cubic-bezier(0.25,1,0.5,1);}
+.tarif.show {opacity:1;transform:translateY(0);}
+.tarif strong {display:block;margin-top:4px;color:#9c0a54;font-size:15px;}
 
 /* ================= Animations ================= */
-@keyframes fadeUp {
-  from {opacity:0; transform: translateY(20px);}
-  to {opacity:1; transform: translateY(0);}
-}
-@keyframes fadeDown {
-  from {opacity:0; transform: translateY(-20px);}
-  to {opacity:1; transform: translateY(0);}
-}
-@keyframes glowText {
-  0%, 100% { text-shadow: 0 0 4px rgba(156, 10, 84, 0.3); }
-  50% { text-shadow: 0 0 12px rgba(156, 10, 84, 0.6); }
-}
-@keyframes shimmer {
-  0% { left: -60%; }
-  100% { left: 120%; }
-}
-
-
-  </style>
+@keyframes fadeUp {from {opacity:0;transform:translateY(20px);} to {opacity:1;transform:translateY(0);}}
+@keyframes fadeDown {from {opacity:0;transform:translateY(-20px);} to {opacity:1;transform:translateY(0);}}
+@keyframes glowText {0% {text-shadow:0 0 4px rgba(156,10,84,0.3);} 50% {text-shadow:0 0 14px rgba(156,10,84,0.6);} 100% {text-shadow:0 0 4px rgba(156,10,84,0.3);}}
+@keyframes shimmer {0% {left:-60%;} 100% {left:120%;}}
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1>Carbon Rent</h1>
-    <div class="subtitle">Cost Calculator – Drive Smart</div>
+<div class="container">
+<h1>Carbon Rent</h1>
+<div class="subtitle">Cost Calculator – Drive Smart</div>
 
-    <div class="card">
-      <h3><i class="ph-car"></i> Avtomobil seç</h3>
-      <label for="carSelect">Avtomobil:</label>
-      <select id="carSelect"></select>
+<div class="card">
+<h3><i class="ph-car"></i> Avtomobil seç</h3>
+<label for="carSelect">Avtomobil:</label>
+<select id="carSelect"></select>
 
-      <label for="daysInput"><i class="ph-calendar"></i> Gün sayı</label>
-      <input type="number" id="daysInput" value="4" min="1" max="90">
-      <input type="range" id="daysSlider" value="4" min="1" max="90">
-    </div>
+<label for="daysInput"><i class="ph-calendar"></i> Gün sayı</label>
+<input type="number" id="daysInput" value="4" min="1" max="90">
+<input type="range" id="daysSlider" value="4" min="1" max="90">
+</div>
 
-    <div class="card">
-      <h3><i class="ph-calculator"></i> Hesablama</h3>
-      <div class="summary" id="summary">
-        <p><strong>Avtomobil:</strong> <span id="carName"></span></p>
-        <p><strong>Sinif:</strong> <span id="carClass"></span></p>
-        <p><strong>Gün:</strong> <span id="days"></span></p>
-        <p><strong>Gündəlik tarif:</strong> <span id="dailyPrice"></span></p>
-        <p><strong>Aralıq:</strong> <span id="range"></span></p>
-        <p><strong>Ara cəm:</strong> <span id="subtotal"></span></p>
-        <p><strong>ƏDV (7%):</strong> <span id="vat"></span></p>
-        <p class="total">Cəmi: <span id="total"></span></p>
+<div class="card">
+<h3><i class="ph-calculator"></i> Hesablama</h3>
+<div class="summary" id="summary">
+<p><strong>Avtomobil:</strong> <span id="carName"></span></p>
+<p><strong>Sinif:</strong> <span id="carClass"></span></p>
+<p><strong>Gün:</strong> <span id="days"></span></p>
+<p><strong>Gündəlik tarif:</strong> <span id="dailyPrice"></span></p>
+<p><strong>Aralıq:</strong> <span id="range"></span></p>
+<p><strong>Ara cəm:</strong> <span id="subtotal"></span></p>
+<p><strong>ƏDV (7%):</strong> <span id="vat"></span></p>
+<p class="total">Cəmi: <span id="total"></span></p>
+</div>
+<button class="btn"><i class="ph-arrow-right"></i> Sifarişi davam et</button>
+</div>
 
-        
-      </div>
-      <button class="btn"><i class="ph-arrow-right"></i> Sifarişi davam et</button>
-    </div>
+<div class="card">
+<h3><i class="ph-currency-circle-dollar"></i> Tarif pillələri</h3>
+<div class="tarifler" id="tarifler"></div>
+</div>
+</div>
 
-    <div class="card">
-      <h3><i class="ph-currency-circle-dollar"></i> Tarif pillələri</h3>
-      <div class="tarifler" id="tarifler"></div>
-    </div>
-  </div>
-  <script>
-    const cars = { 
+<script>
+const cars = { 
      "mercedes-s-class-maybach": {
     name: "Mercedes S Class Maybach",
     class: "Business",
@@ -666,162 +454,62 @@ input[type=range]:active::-moz-range-thumb {
   }  
     };
 
+// ===== Elements =====
+const carSelect=document.getElementById("carSelect");
+const daysInput=document.getElementById("daysInput");
+const daysSlider=document.getElementById("daysSlider");
+const carName=document.getElementById("carName");
+const carClass=document.getElementById("carClass");
+const days=document.getElementById("days");
+const dailyPrice=document.getElementById("dailyPrice");
+const range=document.getElementById("range");
+const subtotal=document.getElementById("subtotal");
+const vat=document.getElementById("vat");
+const total=document.getElementById("total");
+const tarifler=document.getElementById("tarifler");
+const summary=document.getElementById("summary");
 
-
-const carSelect = document.getElementById("carSelect");
-const daysInput = document.getElementById("daysInput");
-const daysSlider = document.getElementById("daysSlider");
-const carName = document.getElementById("carName");
-const carClass = document.getElementById("carClass");
-const days = document.getElementById("days");
-const dailyPrice = document.getElementById("dailyPrice");
-const range = document.getElementById("range");
-const subtotal = document.getElementById("subtotal");
-const vat = document.getElementById("vat");
-const total = document.getElementById("total");
-const tarifler = document.getElementById("tarifler");
-const summary = document.getElementById("summary");
-
-let currentSliderValue = parseInt(daysSlider.value);
-let targetSliderValue = currentSliderValue;
-
-
-const params = new URLSearchParams(window.location.search);
-if(params.has("car") && cars[params.get("car")]) {
-  carSelect.value = params.get("car");
-}
-if(params.has("days")) {
-  let d = parseInt(params.get("days"));
-  if(d >=1 && d <= 90) {
-    daysInput.value = daysSlider.value = d;
-    targetSliderValue = d;
-  }
-}
-
-
+let currentSliderValue=parseInt(daysSlider.value),targetSliderValue=currentSliderValue;
+const params=new URLSearchParams(window.location.search);
+if(params.has("car")&&cars[params.get("car")]) carSelect.value=params.get("car");
+if(params.has("days")) {let d=parseInt(params.get("days")); if(d>=1&&d<=90){daysInput.value=daysSlider.value=d;targetSliderValue=d;}}
 
 // ===== Slider spring animation =====
-function animateSliderSpring() {
-  currentSliderValue += (targetSliderValue - currentSliderValue) * 0.2;
-  daysSlider.value = currentSliderValue.toFixed(0);
-  if (Math.abs(targetSliderValue - currentSliderValue) > 0.1) {
-    requestAnimationFrame(animateSliderSpring);
-  } else {
-    currentSliderValue = targetSliderValue;
-    daysSlider.value = targetSliderValue;
-  }
-}
+function animateSliderSpring(){currentSliderValue+=(targetSliderValue-currentSliderValue)*0.2;daysSlider.value=currentSliderValue.toFixed(0);if(Math.abs(targetSliderValue-currentSliderValue)>0.1){requestAnimationFrame(animateSliderSpring);}else{currentSliderValue=targetSliderValue;daysSlider.value=targetSliderValue;}}
 
-// ===== Animate numbers =====
-function animateNumber(element, start, end, duration = 500) {
-  const range = end - start;
-  let startTime = null;
-  function step(timestamp) {
-    if (!startTime) startTime = timestamp;
-    const progress = Math.min((timestamp - startTime) / duration, 1);
-    element.textContent = "AZN " + (start + range * progress).toFixed(2);
-    if (progress < 1) requestAnimationFrame(step);
-  }
+// ===== Animate numbers (easeOutCubic) =====
+function animateNumber(element,start,end,duration=600){
+  const easeOutCubic=t=> (--t)*t*t+1;
+  const range=end-start;let startTime=null;
+  function step(timestamp){if(!startTime) startTime=timestamp;let progress=Math.min((timestamp-startTime)/duration,1);progress=easeOutCubic(progress);element.textContent="AZN "+(start+range*progress).toFixed(2);if(progress<1) requestAnimationFrame(step);}
   requestAnimationFrame(step);
 }
 
 // ===== Render tariffs =====
-function renderTariffs(car) {
-  tarifler.innerHTML = "";
-  car.tariffs.forEach((t, i) => {
-    const div = document.createElement("div");
-    div.className = "tarif";
-    setTimeout(() => div.classList.add("show"), i * 100);
-    div.innerHTML = `${t.min}–${t.max >= 999 ? "+" : t.max} gün <strong>AZN ${t.price.toFixed(2)}</strong>`;
-    tarifler.appendChild(div);
-  });
-}
+function renderTariffs(car){tarifler.innerHTML="";car.tariffs.forEach((t,i)=>{const div=document.createElement("div");div.className="tarif";setTimeout(()=>div.classList.add("show"),i*100);div.innerHTML=`${t.min}–${t.max>=999?"+":t.max} gün <strong>AZN ${t.price.toFixed(2)}</strong>`;tarifler.appendChild(div);});}
 
 // ===== Update calculator =====
-function updateCalculator() {
-  const car = cars[carSelect.value];
-  let d = parseInt(daysInput.value) || 1;
-  if(d < 1) d = 1;
-  if(d > 90) d = 90;
-
-  targetSliderValue = d;
-  animateSliderSpring();
-
-  let tariff = car.tariffs.find(t => d >= t.min && d <= t.max);
-  if (!tariff) tariff = car.tariffs[car.tariffs.length-1];
-
-  const pricePerDay = tariff.price;
-  const sub = d * pricePerDay;
-  const vatVal = +(sub * 0.07).toFixed(2);
-  const totalVal = +(sub + vatVal).toFixed(2);
-
-  carName.textContent = car.name;
-  carClass.textContent = car.class;
-  days.textContent = d + " gün";
-  dailyPrice.textContent = "AZN " + pricePerDay.toFixed(2);
-  range.textContent = tariff.min + "–" + (tariff.max>=999?"+" : tariff.max) + " gün";
-
-  animateNumber(subtotal, parseFloat(subtotal.textContent.replace("AZN ","")) || 0, sub);
-  animateNumber(vat, parseFloat(vat.textContent.replace("AZN ","")) || 0, vatVal);
-  animateNumber(total, parseFloat(total.textContent.replace("AZN ","")) || 0, totalVal);
-
-  Array.from(summary.querySelectorAll("p")).forEach((p, i) => {
-    p.classList.remove("show");
-    setTimeout(() => p.classList.add("show"), i * 150);
-  });
-
+function updateCalculator(){
+  const car=cars[carSelect.value];let d=parseInt(daysInput.value)||1;if(d<1)d=1;if(d>90)d=90;
+  targetSliderValue=d;animateSliderSpring();
+  let tariff=car.tariffs.find(t=>d>=t.min&&d<=t.max);if(!tariff)tariff=car.tariffs[car.tariffs.length-1];
+  const pricePerDay=tariff.price,sub=d*pricePerDay,vatVal=+(sub*0.07).toFixed(2),totalVal=+(sub+vatVal).toFixed(2);
+  carName.textContent=car.name;carClass.textContent=car.class;days.textContent=d+" gün";dailyPrice.textContent="AZN "+pricePerDay.toFixed(2);range.textContent=tariff.min+"–"+(tariff.max>=999?"+":tariff.max)+" gün";
+  animateNumber(subtotal,parseFloat(subtotal.textContent.replace("AZN ",""))||0,sub);
+  animateNumber(vat,parseFloat(vat.textContent.replace("AZN ",""))||0,vatVal);
+  animateNumber(total,parseFloat(total.textContent.replace("AZN ",""))||0,totalVal);
+  Array.from(summary.querySelectorAll("p")).forEach((p,i)=>{p.classList.remove("show");setTimeout(()=>p.classList.add("show"),i*120);});
   renderTariffs(car);
 }
 
 // ===== Populate car select =====
-Object.keys(cars).forEach(key => {
-  const option = document.createElement("option");
-  option.value = key;
-  option.textContent = cars[key].name + " (" + cars[key].class + ")";
-  carSelect.appendChild(option);
-});
+Object.keys(cars).forEach(key=>{const option=document.createElement("option");option.value=key;option.textContent=cars[key].name+" ("+cars[key].class+")";carSelect.appendChild(option);});
+carSelect.addEventListener("change",updateCalculator);
+daysInput.addEventListener("input",()=>{daysSlider.value=daysInput.value;updateCalculator();});
+daysSlider.addEventListener("input",()=>{daysInput.value=daysSlider.value;updateCalculator();});
 
-// ===== Apply URL params =====
-if(params.has("car") && cars[params.get("car")]) carSelect.value = params.get("car");
-if(params.has("days")) {
-  let d = parseInt(params.get("days"));
-  if(d >=1 && d <= 90) daysInput.value = daysSlider.value = d;
-}
-
-    
-
-// ===== Event listeners =====
-carSelect.addEventListener("change", updateCalculator);
-
-daysInput.addEventListener("input", () => { 
-  let val = daysInput.value;
-  if(val === "") { targetSliderValue = 0; return; }
-  val = parseInt(val);
-  if(val > 90) val = 90;
-  if(val < 1) val = 1;
-  daysInput.value = val;
-  targetSliderValue = val;
-  animateSliderSpring();
-  updateCalculator();
-});
-
-daysSlider.addEventListener("input", () => {
-  daysInput.value = daysSlider.value;
-  targetSliderValue = parseInt(daysSlider.value);
-  currentSliderValue = targetSliderValue;
-  updateCalculator();
-});
-
-// ===== iOS keyboard fix =====
-function fixIOSKeyboard() {
-  if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    document.body.addEventListener('focusin', () => { setTimeout(() => { window.scrollTo(0,0); }, 300); });
-    document.body.addEventListener('focusout', () => { setTimeout(() => { window.scrollTo(0,0); }, 300); });
-  }
-}
-fixIOSKeyboard();
-
+// ===== Initial render =====
 updateCalculator();
-  </script>
+</script>
 </body>
 </html>
