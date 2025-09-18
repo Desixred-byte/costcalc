@@ -14,9 +14,9 @@ html, body {width:100%; height:100%; font-family:'Montserrat',sans-serif; backgr
 a, select, option {color:inherit; text-decoration:none;}
 input, select, textarea {font-size:16px;}
 .container {max-width:500px; margin:auto; padding:20px;}
-h1 {text-align:center; font-weight:800; font-size:28px; margin-bottom:6px; background:linear-gradient(135deg,#9c0a54,#7b0045); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-shadow:2px 2px 8px rgba(156,10,84,0.4); animation:fadeDown 0.8s ease forwards;}
+h1 {text-align:center; font-weight:800; font-size:28px; margin-bottom:6px; background:linear-gradient(135deg,#9c0a54,#7b0045); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-shadow:2px 2px 8px rgba(156,10,84,0.4);}
 .subtitle {text-align:center; font-size:15px; font-weight:500; color:#444; margin-bottom:25px; opacity:0.9;}
-.card {background:#fff; border-radius:24px; box-shadow:0 12px 28px rgba(0,0,0,0.08),0 4px 8px rgba(0,0,0,0.04); padding:24px; margin:20px 0; transition:transform 0.3s ease, box-shadow 0.3s ease; animation:fadeUp 0.7s ease forwards; overflow:hidden;}
+.card {background:#fff; border-radius:24px; box-shadow:0 12px 28px rgba(0,0,0,0.08),0 4px 8px rgba(0,0,0,0.04); padding:24px; margin:20px 0; transition:transform 0.3s ease, box-shadow 0.3s ease; overflow:hidden;}
 .card:hover {transform:translateY(-6px) rotateX(2deg) rotateY(2deg); box-shadow:0 16px 34px rgba(0,0,0,0.12),0 6px 12px rgba(0,0,0,0.05);}
 h3 {margin-top:0;margin-bottom:14px;font-weight:600;font-size:19px;color:#222;display:flex;align-items:center;gap:8px;}
 label {font-weight:500;margin-top:14px;display:block;color:#444;}
@@ -30,7 +30,7 @@ input[type=range]::-moz-range-thumb {width:24px;height:24px;background:#9c0a54;b
 input[type=range]:active::-moz-range-thumb {transform:scale(1.4);}
 .summary p {margin:6px 0; font-size:15px; opacity:0; transform:translateY(6px); transition:all 0.4s ease;}
 .summary p.show {opacity:1; transform:translateY(0);}
-.total {font-size:26px; font-weight:800; background:linear-gradient(135deg,#9c0a54,#7b0045); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-top:20px; position:relative; animation:glowText 3s infinite ease-in-out;}
+.total {font-size:26px; font-weight:800; background:linear-gradient(135deg,#9c0a54,#7b0045); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-top:20px; position:relative;}
 .total::after {content:"";position:absolute;top:0;left:-60%;width:45%;height:100%;background:linear-gradient(120deg,rgba(255,255,255,0.45)0%,transparent 80%);transform:skewX(-25deg);animation:shimmer 4s infinite;}
 .btn {display:block;width:100%; text-align:center; padding:16px; border-radius:18px; background:linear-gradient(135deg,#9c0a54,#7b0045); color:#fff; font-size:16px; font-weight:600; border:none; cursor:pointer; margin-top:18px; box-shadow:0 6px 14px rgba(0,0,0,0.18); transition:all 0.25s ease;}
 .btn:hover {transform:translateY(-3px); box-shadow:0 10px 20px rgba(0,0,0,0.2);}
@@ -39,23 +39,13 @@ input[type=range]:active::-moz-range-thumb {transform:scale(1.4);}
 .tarif {background:#fafafa; border-radius:14px; box-shadow:inset 0 1px 3px rgba(0,0,0,0.05); padding:14px; text-align:center; font-size:14px; transition:all 0.3s ease; opacity:0; transform:scale(0.95) translateY(10px);}
 .tarif.show {opacity:1; transform:scale(1) translateY(0);}
 .tarif strong {display:block; margin-top:4px; color:#9c0a54; font-size:15px;}
-
-/* ================ Currency Toggle ================ */
-.currency-toggle {display:flex; justify-content:center; margin-bottom:20px; perspective:1000px;}
-.currency-toggle .switch {width:120px; height:40px; background:#eee; border-radius:20px; position:relative; cursor:pointer; transform-style:preserve-3d; transition:all 0.4s cubic-bezier(0.4,0,0.2,1);}
-.currency-toggle .switch .toggle {position:absolute; top:2px; left:2px; width:56px; height:36px; background:#9c0a54; border-radius:18px; transition:all 0.4s cubic-bezier(0.4,0,0.2,1); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:600; box-shadow:0 4px 10px rgba(0,0,0,0.2);}
-.currency-toggle .option {position:absolute; width:50%; height:100%; display:flex; align-items:center; justify-content:center; font-weight:600; color:#444; pointer-events:none;}
-.currency-toggle .option.left {left:0;}
-.currency-toggle .option.right {right:0;}
-
-/* ================ Language Toggle ================ */
-.language-toggle {display:flex; justify-content:center; gap:10px; margin-bottom:20px;}
-.language-toggle span {padding:6px 12px; border-radius:12px; cursor:pointer; font-weight:600; transition:all 0.25s ease;}
-.language-toggle span.active {background:#9c0a54; color:#fff;}
-
-@keyframes fadeUp {from{opacity:0; transform:translateY(20px);}to{opacity:1; transform:translateY(0);}}
-@keyframes fadeDown {from{opacity:0; transform:translateY(-20px);}to{opacity:1; transform:translateY(0);}}
-@keyframes glowText {0%,100%{text-shadow:0 0 4px rgba(156,10,84,0.3);}50%{text-shadow:0 0 12px rgba(156,10,84,0.6);}}
+.currency-toggle {display:flex;gap:8px;margin-bottom:20px;}
+.currency-btn {padding:6px 14px;border-radius:12px;border:1px solid #9c0a54;background:#fff;color:#9c0a54;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.currency-btn.active {background:#9c0a54;color:#fff;}
+.currency-btn:hover:not(.active){background:#f0d2e0;}
+.language-toggle {display:flex;gap:6px;align-items:center;}
+.language-toggle span {padding:4px 10px;border-radius:10px;cursor:pointer;border:1px solid #9c0a54;color:#9c0a54;font-weight:600;}
+.language-toggle span.active {background:#9c0a54;color:#fff;}
 @keyframes shimmer {0%{left:-60%;}100%{left:120%;}}
   </style>
 </head>
@@ -64,25 +54,23 @@ input[type=range]:active::-moz-range-thumb {transform:scale(1.4);}
 <h1>Carbon Rent</h1>
 <div class="subtitle">Cost Calculator – Drive Smart</div>
 
-<!-- Currency Toggle -->
-<div class="currency-toggle">
-  <div class="switch" id="currencySwitch">
-    <div class="toggle" id="toggle">AZN</div>
-    <div class="option left">AZN</div>
-    <div class="option right">USD</div>
+<!-- Currency & Language -->
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+  <div class="currency-toggle">
+    <button class="currency-btn active" data-currency="AZN">AZN</button>
+    <button class="currency-btn" data-currency="USD">USD</button>
+    <button class="currency-btn" data-currency="EUR">EUR</button>
+  </div>
+  <div class="language-toggle">
+    <span data-lang="az" class="active">AZ</span>
+    <span data-lang="en">EN</span>
+    <span data-lang="ru">RU</span>
   </div>
 </div>
 
-<!-- Language Toggle -->
-<div class="language-toggle">
-  <span data-lang="az" class="active">AZ</span>
-  <span data-lang="en">EN</span>
-  <span data-lang="ru">RU</span>
-</div>
-
 <div class="card">
-<h3><i class="ph-car"></i> <span id="carTitle">Avtomobil seç</span></h3>
-<label for="carSelect" id="carLabel">Avtomobil:</label>
+<h3><i class="ph-car"></i> <span id="carLabel">Avtomobil seç</span></h3>
+<label for="carSelect">Avtomobil:</label>
 <select id="carSelect"></select>
 
 <label for="daysInput"><i class="ph-calendar"></i> <span id="daysLabel">Gün sayı</span></label>
@@ -91,25 +79,26 @@ input[type=range]:active::-moz-range-thumb {transform:scale(1.4);}
 </div>
 
 <div class="card">
-<h3><i class="ph-calculator"></i> <span id="summaryTitle">Hesablama</span></h3>
+<h3><i class="ph-calculator"></i> <span id="calcLabel">Hesablama</span></h3>
 <div class="summary" id="summary">
-<p><strong id="carText">Avtomobil:</strong> <span id="carName"></span></p>
-<p><strong id="classText">Sinif:</strong> <span id="carClass"></span></p>
-<p><strong id="daysText">Gün:</strong> <span id="days"></span></p>
-<p><strong id="dailyText">Gündəlik tarif:</strong> <span id="dailyPrice"></span></p>
-<p><strong id="rangeText">Aralıq:</strong> <span id="range"></span></p>
-<p><strong id="subtotalText">Ara cəm:</strong> <span id="subtotal"></span></p>
-<p><strong id="vatText">ƏDV (7%):</strong> <span id="vat"></span></p>
-<p class="total" id="totalText">Cəmi: <span id="total"></span></p>
+<p><strong><span id="carLabel2">Avtomobil:</span></strong> <span id="carName"></span></p>
+<p><strong><span id="classLabel">Sinif:</span></strong> <span id="carClass"></span></p>
+<p><strong><span id="daysLabel2">Gün:</span></strong> <span id="days"></span></p>
+<p><strong><span id="dailyLabel">Gündəlik tarif:</span></strong> <span id="dailyPrice"></span></p>
+<p><strong><span id="rangeLabel">Aralıq:</span></strong> <span id="range"></span></p>
+<p><strong><span id="subLabel">Ara cəm:</span></strong> <span id="subtotal"></span></p>
+<p><strong><span id="vatLabel">ƏDV (7%):</span></strong> <span id="vat"></span></p>
+<p class="total"><span id="totalLabel">Cəmi:</span> <span id="total"></span></p>
 </div>
-<button class="btn" id="orderBtn"><i class="ph-arrow-right"></i> Sifarişi davam et</button>
+<button class="btn"><i class="ph-arrow-right"></i> <span id="orderLabel">Sifarişi davam et</span></button>
 </div>
 
 <div class="card">
-<h3><i class="ph-currency-circle-dollar"></i> <span id="tariffsTitle">Tarif pillələri</span></h3>
+<h3><i class="ph-currency-circle-dollar"></i> <span id="tariffLabel">Tarif pillələri</span></h3>
 <div class="tarifler" id="tarifler"></div>
 </div>
-
+</div>
+  
   <script>
     const cars = { 
      "mercedes-s-class-maybach": {
@@ -470,70 +459,48 @@ const translations = {
   ru: {carTitle:"Выберите Авто", carLabel:"Авто:", daysLabel:"Количество дней", summaryTitle:"Расчет", carText:"Авто:", classText:"Класс:", daysText:"Дни:", dailyText:"Дневная ставка:", rangeText:"Диапазон:", subtotalText:"Промежуточно:", vatText:"НДС (7%):", totalText:"Итого:", tariffsTitle:"Уровни тарифов", orderBtn:"Продолжить заказ"}
 };
 
-const carSelect = document.getElementById("carSelect");
-const daysInput = document.getElementById("daysInput");
-const daysSlider = document.getElementById("daysSlider");
-const carName = document.getElementById("carName");
-const carClass = document.getElementById("carClass");
-const days = document.getElementById("days");
-const dailyPrice = document.getElementById("dailyPrice");
-const rangeElem = document.getElementById("range");
-const subtotal = document.getElementById("subtotal");
-const vat = document.getElementById("vat");
-const total = document.getElementById("total");
-const tarifler = document.getElementById("tarifler");
-const summary = document.getElementById("summary");
-
-const carTitle = document.getElementById("carTitle");
-const carLabel = document.getElementById("carLabel");
-const daysLabel = document.getElementById("daysLabel");
-const summaryTitle = document.getElementById("summaryTitle");
-const carText = document.getElementById("carText");
-const classText = document.getElementById("classText");
-const daysText = document.getElementById("daysText");
-const dailyText = document.getElementById("dailyText");
-const rangeText = document.getElementById("rangeText");
-const subtotalText = document.getElementById("subtotalText");
-const vatText = document.getElementById("vatText");
-const totalText = document.getElementById("totalText");
-const tariffsTitle = document.getElementById("tariffsTitle");
-const orderBtn = document.getElementById("orderBtn");
-
-let currentSliderValue = parseInt(daysSlider.value);
-let targetSliderValue = currentSliderValue;
-let currentCurrency = 'AZN';
-let currentLang = 'az';
-const exchangeRate = 0.52; // AZN → EUR
-
 // ===== Populate car select =====
-Object.keys(cars).forEach(key => {
-  const option = document.createElement("option");
-  option.value = key;
-  option.textContent = cars[key].name + " (" + cars[key].class + ")";
+const carSelect=document.getElementById("carSelect");
+Object.keys(cars).forEach(key=>{
+  const option=document.createElement("option");
+  option.value=key; option.textContent=cars[key].name+" ("+cars[key].class+")";
   carSelect.appendChild(option);
 });
 
+// ===== Variables =====
+const daysInput=document.getElementById("daysInput");
+const daysSlider=document.getElementById("daysSlider");
+const carName=document.getElementById("carName");
+const carClass=document.getElementById("carClass");
+const days=document.getElementById("days");
+const dailyPrice=document.getElementById("dailyPrice");
+const rangeElem=document.getElementById("range");
+const subtotal=document.getElementById("subtotal");
+const vat=document.getElementById("vat");
+const total=document.getElementById("total");
+const tarifler=document.getElementById("tarifler");
+
+let currentSliderValue=parseInt(daysSlider.value), targetSliderValue=currentSliderValue;
+let currentCurrency='AZN';
+const rates={AZN:1,USD:0.59,EUR:0.52};
+let currentLang='az';
+const dayWord={az:'gün',en:'days',ru:'дн.'};
+const labels = {
+  az:{car:"Avtomobil:",class:"Sinif:",days:"Gün:",daily:"Gündəlik tarif:",range:"Aralıq:",subtotal:"Ara cəm:",vat:"ƏDV (7%):",total:"Cəmi:",carLabel:"Avtomobil seç",daysLabel:"Gün sayı",calcLabel:"Hesablama",orderLabel:"Sifarişi davam et",tariffLabel:"Tarif pillələri"},
+  en:{car:"Car:",class:"Class:",days:"Days:",daily:"Daily rate:",range:"Range:",subtotal:"Subtotal:",vat:"VAT (7%):",total:"Total:",carLabel:"Select Car",daysLabel:"Number of days",calcLabel:"Calculator",orderLabel:"Continue order",tariffLabel:"Tariff tiers"},
+  ru:{car:"Авто:",class:"Класс:",days:"Дни:",daily:"Суточная ставка:",range:"Диапазон:",subtotal:"Промежуточно:",vat:"НДС (7%):",total:"Итого:",carLabel:"Выберите авто",daysLabel:"Количество дней",calcLabel:"Калькулятор",orderLabel:"Продолжить",tariffLabel:"Тарифы"}
+};
+
 // ===== Animate slider =====
-function animateSliderSpring() {
-  currentSliderValue += (targetSliderValue - currentSliderValue) * 0.2;
-  daysSlider.value = currentSliderValue.toFixed(0);
-  if(Math.abs(targetSliderValue - currentSliderValue) > 0.1) requestAnimationFrame(animateSliderSpring);
-  else currentSliderValue = targetSliderValue;
+function animateSliderSpring(){
+  currentSliderValue+=(targetSliderValue-currentSliderValue)*0.2;
+  daysSlider.value=currentSliderValue.toFixed(0);
+  if(Math.abs(targetSliderValue-currentSliderValue)>0.1) requestAnimationFrame(animateSliderSpring);
+  else currentSliderValue=targetSliderValue;
 }
 
-// ===== Animate numbers =====
-function formatCurrency(val){ return currentCurrency==='AZN'? `AZN ${val.toFixed(2)}` : `€ ${(val*exchangeRate).toFixed(2)}`; }
-function animateNumber(element, start, end, duration=500){
-  const range = end-start;
-  let startTime = null;
-  function step(ts){
-    if(!startTime) startTime=ts;
-    const progress = Math.min((ts-startTime)/duration,1);
-    element.textContent = formatCurrency(start + range*progress);
-    if(progress<1) requestAnimationFrame(step);
-  }
-  requestAnimationFrame(step);
-}
+// ===== Format currency =====
+function formatCurrency(val){return (currentCurrency==='AZN'? `AZN ${val*rates[currentCurrency]:.2f}` : currentCurrency==='USD'? `USD ${(val*rates[currentCurrency]).toFixed(2)}`:`€ ${(val*rates[currentCurrency]).toFixed(2)}`);}
 
 // ===== Render tariffs =====
 function renderTariffs(car){
@@ -542,75 +509,70 @@ function renderTariffs(car){
     const div=document.createElement("div");
     div.className="tarif";
     setTimeout(()=>div.classList.add("show"),i*100);
-    const price = currentCurrency==='AZN'? t.price : (t.price*exchangeRate).toFixed(2);
-    div.innerHTML=`${t.min}–${t.max>=999?'+':t.max} gün <strong>${currentCurrency} ${price}</strong>`;
+    const price = (t.price*rates[currentCurrency]).toFixed(2);
+    div.innerHTML=`${t.min}–${t.max>=999?'+':t.max} ${dayWord[currentLang]} <strong>${currentCurrency} ${price}</strong>`;
     tarifler.appendChild(div);
   });
 }
 
 // ===== Update calculator =====
 function updateCalculator(){
-  const car = cars[carSelect.value];
-  let d = parseInt(daysInput.value)||1; if(d<1)d=1;if(d>90)d=90;
-  targetSliderValue = d; animateSliderSpring();
-  let tariff = car.tariffs.find(t=>d>=t.min&&d<=t.max); if(!tariff) tariff=car.tariffs[car.tariffs.length-1];
-  const pricePerDay = tariff.price;
-  const sub = d*pricePerDay;
-  const vatVal = +(sub*0.07).toFixed(2);
-  const totalVal = +(sub+vatVal).toFixed(2);
+  const car=cars[carSelect.value];
+  let d=parseInt(daysInput.value)||1; if(d<1)d=1;if(d>90)d=90;
+  targetSliderValue=d; animateSliderSpring();
+  let tariff=car.tariffs.find(t=>d>=t.min&&d<=t.max); if(!tariff) tariff=car.tariffs[car.tariffs.length-1];
+  const pricePerDay=tariff.price;
+  const sub=d*pricePerDay;
+  const vatVal=+(sub*0.07).toFixed(2);
+  const totalVal=+(sub+vatVal).toFixed(2);
 
   carName.textContent=car.name;
   carClass.textContent=car.class;
-  days.textContent=d+" gün";
+  days.textContent=d+" "+dayWord[currentLang];
   dailyPrice.textContent=formatCurrency(pricePerDay);
-  rangeElem.textContent=tariff.min+"–"+(tariff.max>=999?'+':tariff.max)+" gün";
-  animateNumber(subtotal, parseFloat(subtotal.textContent.replace(/[^0-9.]/g,""))||0, sub);
-  animateNumber(vat, parseFloat(vat.textContent.replace(/[^0-9.]/g,""))||0, vatVal);
-  animateNumber(total, parseFloat(total.textContent.replace(/[^0-9.]/g,""))||0, totalVal);
+  rangeElem.textContent=tariff.min+"–"+(tariff.max>=999?'+':tariff.max)+" "+dayWord[currentLang];
+  subtotal.textContent=formatCurrency(sub);
+  vat.textContent=formatCurrency(vatVal);
+  total.textContent=formatCurrency(totalVal);
 
-  Array.from(summary.querySelectorAll("p")).forEach((p,i)=>{p.classList.remove("show");setTimeout(()=>p.classList.add("show"),i*150);});
+  // Update labels
+  document.getElementById("carLabel").textContent=labels[currentLang].carLabel;
+  document.getElementById("carLabel2").textContent=labels[currentLang].car;
+  document.getElementById("classLabel").textContent=labels[currentLang].class;
+  document.getElementById("daysLabel").textContent=labels[currentLang].daysLabel;
+  document.getElementById("daysLabel2").textContent=labels[currentLang].days;
+  document.getElementById("dailyLabel").textContent=labels[currentLang].daily;
+  document.getElementById("rangeLabel").textContent=labels[currentLang].range;
+  document.getElementById("subLabel").textContent=labels[currentLang].subtotal;
+  document.getElementById("vatLabel").textContent=labels[currentLang].vat;
+  document.getElementById("totalLabel").textContent=labels[currentLang].total;
+  document.getElementById("calcLabel").textContent=labels[currentLang].calcLabel;
+  document.getElementById("orderLabel").textContent=labels[currentLang].orderLabel;
+  document.getElementById("tariffLabel").textContent=labels[currentLang].tariffLabel;
+
   renderTariffs(car);
 }
 
 // ===== Event listeners =====
 carSelect.addEventListener("change", updateCalculator);
-daysInput.addEventListener("input",()=>{ let val=parseInt(daysInput.value)||1;if(val>90)val=90;if(val<1)val=1;daysInput.value=val;targetSliderValue=val;animateSliderSpring();updateCalculator(); });
-daysSlider.addEventListener("input",()=>{daysInput.value=daysSlider.value;targetSliderValue=parseInt(daysSlider.value);currentSliderValue=targetSliderValue;updateCalculator();});
+daysInput.addEventListener("input",()=>{let val=parseInt(daysInput.value)||1;if(val<1)val=1;if(val>90)val=90;daysInput.value=val;targetSliderValue=val;updateCalculator();});
+daysSlider.addEventListener("input",()=>{daysInput.value=daysSlider.value;targetSliderValue=parseInt(daysSlider.value);updateCalculator();});
 
-// ===== Currency Switch =====
-const currencySwitch=document.getElementById("currencySwitch");
-const toggle=document.getElementById("toggle");
-currencySwitch.addEventListener("click",()=>{
-  currentCurrency=currentCurrency==='AZN'?'EUR':'AZN';
-  toggle.style.left=currentCurrency==='AZN'?'2px':'62px';
-  toggle.textContent=currentCurrency;
+document.querySelectorAll(".currency-btn").forEach(btn=>btn.addEventListener("click",()=>{
+  currentCurrency=btn.dataset.currency;
+  document.querySelectorAll(".currency-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
   updateCalculator();
-});
+}));
 
-// ===== Language Switch =====
-document.querySelectorAll(".language-toggle span").forEach(el=>{
-  el.addEventListener("click", ()=>{
-    currentLang = el.dataset.lang;
-    document.querySelectorAll(".language-toggle span").forEach(s=>s.classList.remove("active"));
-    el.classList.add("active");
-    const t = translations[currentLang];
-    carTitle.textContent = t.carTitle;
-    carLabel.textContent = t.carLabel;
-    daysLabel.textContent = t.daysLabel;
-    summaryTitle.textContent = t.summaryTitle;
-    carText.textContent = t.carText;
-    classText.textContent = t.classText;
-    daysText.textContent = t.daysText;
-    dailyText.textContent = t.dailyText;
-    rangeText.textContent = t.rangeText;
-    subtotalText.textContent = t.subtotalText;
-    vatText.textContent = t.vatText;
-    totalText.textContent = t.totalText;
-    tariffsTitle.textContent = t.tariffsTitle;
-    orderBtn.textContent = t.orderBtn;
-  });
-});
+document.querySelectorAll(".language-toggle span").forEach(span=>span.addEventListener("click",()=>{
+  currentLang=span.dataset.lang;
+  document.querySelectorAll(".language-toggle span").forEach(s=>s.classList.remove("active"));
+  span.classList.add("active");
+  updateCalculator();
+}));
 
+// ===== Initialize =====
 updateCalculator();
   </script>
 </body>
