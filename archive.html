@@ -667,7 +667,7 @@ input[type=range]:active::-moz-range-thumb {
     };
 
 
-
+// DOM elements
 const carSelect = document.getElementById("carSelect");
 const daysInput = document.getElementById("daysInput");
 const daysSlider = document.getElementById("daysSlider");
@@ -685,20 +685,26 @@ const summary = document.getElementById("summary");
 let currentSliderValue = parseInt(daysSlider.value);
 let targetSliderValue = currentSliderValue;
 
+// Populate car select
+Object.keys(cars).forEach(key => {
+  const option = document.createElement("option");
+  option.value = key;
+  option.textContent = cars[key].name + " (" + cars[key].class + ")";
+  carSelect.appendChild(option);
+});
 
+// Apply URL params AFTER populating the select
 const params = new URLSearchParams(window.location.search);
-if(params.has("car") && cars[params.get("car")]) {
+if (params.has("car") && cars[params.get("car")]) {
   carSelect.value = params.get("car");
 }
-if(params.has("days")) {
+if (params.has("days")) {
   let d = parseInt(params.get("days"));
-  if(d >=1 && d <= 90) {
+  if (d >= 1 && d <= 90) {
     daysInput.value = daysSlider.value = d;
     targetSliderValue = d;
   }
 }
-
-
 
 // ===== Slider spring animation =====
 function animateSliderSpring() {
@@ -748,7 +754,7 @@ function updateCalculator() {
   animateSliderSpring();
 
   let tariff = car.tariffs.find(t => d >= t.min && d <= t.max);
-  if (!tariff) tariff = car.tariffs[car.tariffs.length-1];
+  if (!tariff) tariff = car.tariffs[car.tariffs.length - 1];
 
   const pricePerDay = tariff.price;
   const sub = d * pricePerDay;
@@ -759,11 +765,11 @@ function updateCalculator() {
   carClass.textContent = car.class;
   days.textContent = d + " gün";
   dailyPrice.textContent = "AZN " + pricePerDay.toFixed(2);
-  range.textContent = tariff.min + "–" + (tariff.max>=999?"+" : tariff.max) + " gün";
+  range.textContent = tariff.min + "–" + (tariff.max >= 999 ? "+" : tariff.max) + " gün";
 
-  animateNumber(subtotal, parseFloat(subtotal.textContent.replace("AZN ","")) || 0, sub);
-  animateNumber(vat, parseFloat(vat.textContent.replace("AZN ","")) || 0, vatVal);
-  animateNumber(total, parseFloat(total.textContent.replace("AZN ","")) || 0, totalVal);
+  animateNumber(subtotal, parseFloat(subtotal.textContent.replace("AZN ", "")) || 0, sub);
+  animateNumber(vat, parseFloat(vat.textContent.replace("AZN ", "")) || 0, vatVal);
+  animateNumber(total, parseFloat(total.textContent.replace("AZN ", "")) || 0, totalVal);
 
   Array.from(summary.querySelectorAll("p")).forEach((p, i) => {
     p.classList.remove("show");
@@ -773,32 +779,13 @@ function updateCalculator() {
   renderTariffs(car);
 }
 
-// ===== Populate car select =====
-Object.keys(cars).forEach(key => {
-  const option = document.createElement("option");
-  option.value = key;
-  option.textContent = cars[key].name + " (" + cars[key].class + ")";
-  carSelect.appendChild(option);
-});
-
-// ===== Apply URL params =====
-if(params.has("car") && cars[params.get("car")]) carSelect.value = params.get("car");
-if(params.has("days")) {
-  let d = parseInt(params.get("days"));
-  if(d >=1 && d <= 90) daysInput.value = daysSlider.value = d;
-}
-
-    
-
 // ===== Event listeners =====
 carSelect.addEventListener("change", updateCalculator);
 
 daysInput.addEventListener("input", () => { 
-  let val = daysInput.value;
-  if(val === "") { targetSliderValue = 0; return; }
-  val = parseInt(val);
-  if(val > 90) val = 90;
+  let val = parseInt(daysInput.value) || 1;
   if(val < 1) val = 1;
+  if(val > 90) val = 90;
   daysInput.value = val;
   targetSliderValue = val;
   animateSliderSpring();
@@ -821,6 +808,7 @@ function fixIOSKeyboard() {
 }
 fixIOSKeyboard();
 
+// ===== Initial render =====
 updateCalculator();
   </script>
 </body>
