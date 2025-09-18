@@ -452,127 +452,149 @@ input[type=range]:active::-moz-range-thumb {transform:scale(1.4);}
     };
 
 
-
-const translations = {
-  az: {carTitle:"Avtomobil seç", carLabel:"Avtomobil:", daysLabel:"Gün sayı", summaryTitle:"Hesablama", carText:"Avtomobil:", classText:"Sinif:", daysText:"Gün:", dailyText:"Gündəlik tarif:", rangeText:"Aralıq:", subtotalText:"Ara cəm:", vatText:"ƏDV (7%):", totalText:"Cəmi:", tariffsTitle:"Tarif pillələri", orderBtn:"Sifarişi davam et"},
-  en: {carTitle:"Select Car", carLabel:"Car:", daysLabel:"Number of Days", summaryTitle:"Calculation", carText:"Car:", classText:"Class:", daysText:"Days:", dailyText:"Daily Rate:", rangeText:"Range:", subtotalText:"Subtotal:", vatText:"VAT (7%):", totalText:"Total:", tariffsTitle:"Tariff Levels", orderBtn:"Continue Order"},
-  ru: {carTitle:"Выберите Авто", carLabel:"Авто:", daysLabel:"Количество дней", summaryTitle:"Расчет", carText:"Авто:", classText:"Класс:", daysText:"Дни:", dailyText:"Дневная ставка:", rangeText:"Диапазон:", subtotalText:"Промежуточно:", vatText:"НДС (7%):", totalText:"Итого:", tariffsTitle:"Уровни тарифов", orderBtn:"Продолжить заказ"}
-};
-
-// ===== Populate car select =====
-const carSelect=document.getElementById("carSelect");
-Object.keys(cars).forEach(key=>{
-  const option=document.createElement("option");
-  option.value=key; option.textContent=cars[key].name+" ("+cars[key].class+")";
-  carSelect.appendChild(option);
-});
-
-// ===== Variables =====
-const daysInput=document.getElementById("daysInput");
-const daysSlider=document.getElementById("daysSlider");
-const carName=document.getElementById("carName");
-const carClass=document.getElementById("carClass");
-const days=document.getElementById("days");
-const dailyPrice=document.getElementById("dailyPrice");
-const rangeElem=document.getElementById("range");
-const subtotal=document.getElementById("subtotal");
-const vat=document.getElementById("vat");
-const total=document.getElementById("total");
-const tarifler=document.getElementById("tarifler");
-
-let currentSliderValue=parseInt(daysSlider.value), targetSliderValue=currentSliderValue;
-let currentCurrency='AZN';
-const rates={AZN:1,USD:0.59,EUR:0.52};
-let currentLang='az';
-const dayWord={az:'gün',en:'days',ru:'дн.'};
 const labels = {
   az:{car:"Avtomobil:",class:"Sinif:",days:"Gün:",daily:"Gündəlik tarif:",range:"Aralıq:",subtotal:"Ara cəm:",vat:"ƏDV (7%):",total:"Cəmi:",carLabel:"Avtomobil seç",daysLabel:"Gün sayı",calcLabel:"Hesablama",orderLabel:"Sifarişi davam et",tariffLabel:"Tarif pillələri"},
   en:{car:"Car:",class:"Class:",days:"Days:",daily:"Daily rate:",range:"Range:",subtotal:"Subtotal:",vat:"VAT (7%):",total:"Total:",carLabel:"Select Car",daysLabel:"Number of days",calcLabel:"Calculator",orderLabel:"Continue order",tariffLabel:"Tariff tiers"},
   ru:{car:"Авто:",class:"Класс:",days:"Дни:",daily:"Суточная ставка:",range:"Диапазон:",subtotal:"Промежуточно:",vat:"НДС (7%):",total:"Итого:",carLabel:"Выберите авто",daysLabel:"Количество дней",calcLabel:"Калькулятор",orderLabel:"Продолжить",tariffLabel:"Тарифы"}
 };
 
-// ===== Animate slider =====
-function animateSliderSpring(){
-  currentSliderValue+=(targetSliderValue-currentSliderValue)*0.2;
-  daysSlider.value=currentSliderValue.toFixed(0);
-  if(Math.abs(targetSliderValue-currentSliderValue)>0.1) requestAnimationFrame(animateSliderSpring);
-  else currentSliderValue=targetSliderValue;
+const dayWord = {az:'gün',en:'days',ru:'дн.'};
+const rates = {AZN:1, USD:0.59, EUR:0.52};
+
+let currentCurrency='AZN';
+let currentLang='az';
+let currentSliderValue = 4;
+let targetSliderValue = 4;
+
+const carSelect = document.getElementById("carSelect");
+const daysInput = document.getElementById("daysInput");
+const daysSlider = document.getElementById("daysSlider");
+const carName = document.getElementById("carName");
+const carClass = document.getElementById("carClass");
+const days = document.getElementById("days");
+const dailyPrice = document.getElementById("dailyPrice");
+const rangeElem = document.getElementById("range");
+const subtotal = document.getElementById("subtotal");
+const vat = document.getElementById("vat");
+const total = document.getElementById("total");
+const tarifler = document.getElementById("tarifler");
+
+// Populate car select
+Object.keys(cars).forEach(key=>{
+  const option = document.createElement("option");
+  option.value = key;
+  option.textContent = cars[key].name + " (" + cars[key].class + ")";
+  carSelect.appendChild(option);
+});
+
+// Format currency
+function formatCurrency(val){
+  const converted = val * rates[currentCurrency];
+  if(currentCurrency==='AZN') return `AZN ${converted.toFixed(2)}`;
+  if(currentCurrency==='USD') return `USD ${converted.toFixed(2)}`;
+  if(currentCurrency==='EUR') return `€ ${converted.toFixed(2)}`;
+  return converted.toFixed(2);
 }
 
-// ===== Format currency =====
-function formatCurrency(val){return (currentCurrency==='AZN'? `AZN ${val*rates[currentCurrency]:.2f}` : currentCurrency==='USD'? `USD ${(val*rates[currentCurrency]).toFixed(2)}`:`€ ${(val*rates[currentCurrency]).toFixed(2)}`);}
+// Animate slider
+function animateSliderSpring(){
+  currentSliderValue += (targetSliderValue - currentSliderValue) * 0.2;
+  daysSlider.value = Math.round(currentSliderValue);
+  if(Math.abs(targetSliderValue - currentSliderValue) > 0.1) requestAnimationFrame(animateSliderSpring);
+  else currentSliderValue = targetSliderValue;
+}
 
-// ===== Render tariffs =====
+// Render tariffs
 function renderTariffs(car){
-  tarifler.innerHTML="";
+  tarifler.innerHTML = "";
   car.tariffs.forEach((t,i)=>{
-    const div=document.createElement("div");
-    div.className="tarif";
-    setTimeout(()=>div.classList.add("show"),i*100);
-    const price = (t.price*rates[currentCurrency]).toFixed(2);
-    div.innerHTML=`${t.min}–${t.max>=999?'+':t.max} ${dayWord[currentLang]} <strong>${currentCurrency} ${price}</strong>`;
+    const div = document.createElement("div");
+    div.className = "tarif";
+    setTimeout(()=>div.classList.add("show"), i*100);
+    const price = (t.price * rates[currentCurrency]).toFixed(2);
+    const dayRange = t.max>=999 ? `${t.min}+` : `${t.min}-${t.max}`;
+    div.innerHTML = `${dayRange} ${dayWord[currentLang]} <strong>${currentCurrency} ${price}</strong>`;
     tarifler.appendChild(div);
   });
 }
 
-// ===== Update calculator =====
+// Update calculator
 function updateCalculator(){
-  const car=cars[carSelect.value];
-  let d=parseInt(daysInput.value)||1; if(d<1)d=1;if(d>90)d=90;
-  targetSliderValue=d; animateSliderSpring();
-  let tariff=car.tariffs.find(t=>d>=t.min&&d<=t.max); if(!tariff) tariff=car.tariffs[car.tariffs.length-1];
-  const pricePerDay=tariff.price;
-  const sub=d*pricePerDay;
-  const vatVal=+(sub*0.07).toFixed(2);
-  const totalVal=+(sub+vatVal).toFixed(2);
+  const car = cars[carSelect.value];
+  let d = parseInt(daysInput.value) || 1;
+  if(d<1) d=1; if(d>90)d=90;
+  targetSliderValue = d;
+  animateSliderSpring();
 
-  carName.textContent=car.name;
-  carClass.textContent=car.class;
-  days.textContent=d+" "+dayWord[currentLang];
-  dailyPrice.textContent=formatCurrency(pricePerDay);
-  rangeElem.textContent=tariff.min+"–"+(tariff.max>=999?'+':tariff.max)+" "+dayWord[currentLang];
-  subtotal.textContent=formatCurrency(sub);
-  vat.textContent=formatCurrency(vatVal);
-  total.textContent=formatCurrency(totalVal);
+  let tariff = car.tariffs.find(t=>d>=t.min && d<=t.max);
+  if(!tariff) tariff = car.tariffs[car.tariffs.length-1];
+
+  const pricePerDay = tariff.price;
+  const sub = d * pricePerDay;
+  const vatVal = +(sub*0.07).toFixed(2);
+  const totalVal = +(sub + vatVal).toFixed(2);
+
+  carName.textContent = car.name;
+  carClass.textContent = car.class;
+  days.textContent = d + " " + dayWord[currentLang];
+  dailyPrice.textContent = formatCurrency(pricePerDay);
+  rangeElem.textContent = tariff.min + (tariff.max>=999 ? '+' : '-' + tariff.max) + " " + dayWord[currentLang];
+  subtotal.textContent = formatCurrency(sub);
+  vat.textContent = formatCurrency(vatVal);
+  total.textContent = formatCurrency(totalVal);
 
   // Update labels
-  document.getElementById("carLabel").textContent=labels[currentLang].carLabel;
-  document.getElementById("carLabel2").textContent=labels[currentLang].car;
-  document.getElementById("classLabel").textContent=labels[currentLang].class;
-  document.getElementById("daysLabel").textContent=labels[currentLang].daysLabel;
-  document.getElementById("daysLabel2").textContent=labels[currentLang].days;
-  document.getElementById("dailyLabel").textContent=labels[currentLang].daily;
-  document.getElementById("rangeLabel").textContent=labels[currentLang].range;
-  document.getElementById("subLabel").textContent=labels[currentLang].subtotal;
-  document.getElementById("vatLabel").textContent=labels[currentLang].vat;
-  document.getElementById("totalLabel").textContent=labels[currentLang].total;
-  document.getElementById("calcLabel").textContent=labels[currentLang].calcLabel;
-  document.getElementById("orderLabel").textContent=labels[currentLang].orderLabel;
-  document.getElementById("tariffLabel").textContent=labels[currentLang].tariffLabel;
+  document.getElementById("carLabel").textContent = labels[currentLang].carLabel;
+  document.getElementById("carLabel2").textContent = labels[currentLang].car;
+  document.getElementById("classLabel").textContent = labels[currentLang].class;
+  document.getElementById("daysLabel").textContent = labels[currentLang].daysLabel;
+  document.getElementById("daysLabel2").textContent = labels[currentLang].days;
+  document.getElementById("dailyLabel").textContent = labels[currentLang].daily;
+  document.getElementById("rangeLabel").textContent = labels[currentLang].range;
+  document.getElementById("subLabel").textContent = labels[currentLang].subtotal;
+  document.getElementById("vatLabel").textContent = labels[currentLang].vat;
+  document.getElementById("totalLabel").textContent = labels[currentLang].total;
+  document.getElementById("calcLabel").textContent = labels[currentLang].calcLabel;
+  document.getElementById("orderLabel").textContent = labels[currentLang].orderLabel;
+  document.getElementById("tariffLabel").textContent = labels[currentLang].tariffLabel;
 
   renderTariffs(car);
 }
 
-// ===== Event listeners =====
+// Event listeners
 carSelect.addEventListener("change", updateCalculator);
-daysInput.addEventListener("input",()=>{let val=parseInt(daysInput.value)||1;if(val<1)val=1;if(val>90)val=90;daysInput.value=val;targetSliderValue=val;updateCalculator();});
-daysSlider.addEventListener("input",()=>{daysInput.value=daysSlider.value;targetSliderValue=parseInt(daysSlider.value);updateCalculator();});
-
-document.querySelectorAll(".currency-btn").forEach(btn=>btn.addEventListener("click",()=>{
-  currentCurrency=btn.dataset.currency;
-  document.querySelectorAll(".currency-btn").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
+daysInput.addEventListener("input", ()=>{
+  let val = parseInt(daysInput.value)||1;
+  if(val<1)val=1;if(val>90)val=90;
+  daysInput.value = val;
+  targetSliderValue = val;
   updateCalculator();
-}));
-
-document.querySelectorAll(".language-toggle span").forEach(span=>span.addEventListener("click",()=>{
-  currentLang=span.dataset.lang;
-  document.querySelectorAll(".language-toggle span").forEach(s=>s.classList.remove("active"));
-  span.classList.add("active");
+});
+daysSlider.addEventListener("input", ()=>{
+  daysInput.value = daysSlider.value;
+  targetSliderValue = parseInt(daysSlider.value);
   updateCalculator();
-}));
+});
 
-// ===== Initialize =====
+document.querySelectorAll(".currency-btn").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    currentCurrency = btn.dataset.currency;
+    document.querySelectorAll(".currency-btn").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    updateCalculator();
+  });
+});
+
+document.querySelectorAll(".language-toggle span").forEach(span=>{
+  span.addEventListener("click",()=>{
+    currentLang = span.dataset.lang;
+    document.querySelectorAll(".language-toggle span").forEach(s=>s.classList.remove("active"));
+    span.classList.add("active");
+    updateCalculator();
+  });
+});
+
+// Initialize
 updateCalculator();
   </script>
 </body>
